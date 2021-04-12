@@ -3,16 +3,26 @@ pragma solidity ^0.5.0;
 contract SocialNetwork {
   // Code goes here...
   uint public imageCount = 0;
+  uint public postCount = 0;
   string public name = "PRATIK";
 
 
   //Store Images
   mapping(uint => Image) public images;
 
+  mapping(uint => Post) public posts;
+
   struct Image{
     uint id;
     string hash;
     string description;
+    uint tipAmount;
+    address payable author;
+  }
+
+  struct Post {
+    uint id;
+    string content;
     uint tipAmount;
     address payable author;
   }
@@ -25,6 +35,13 @@ contract SocialNetwork {
     address payable author
   );
 
+  event PostCreated(
+    uint id,
+    string content,
+    uint tipAmount,
+    address payable author
+  );
+
   event ImageTipped(
     uint id,
     string hash,
@@ -32,6 +49,13 @@ contract SocialNetwork {
     uint tipAmount,
     address payable author
   );
+
+  event PostTipped(
+    uint id,
+    string content,
+    uint tipAmount,
+    address payable author
+  );  
 
   //Creating Images
   function uploadImage(string memory _imgHash, string memory _description) public{
@@ -55,6 +79,20 @@ contract SocialNetwork {
 
   }
 
+  function createPost(string memory _content) public {
+
+    // Require valid content
+    require(bytes(_content).length > 0);
+    
+    // Increment the post count
+    postCount ++;
+    // Create the post
+    posts[postCount] = Post(postCount, _content, 0, msg.sender);
+
+    // Trigger event
+    emit PostCreated(postCount, _content, 0, msg.sender);
+  }
+
   function tipImageOwner(uint _id) public payable {
     // Make sure the id is valid
     require(_id > 0 && _id <= imageCount);
@@ -71,6 +109,23 @@ contract SocialNetwork {
     // Trigger an event
     emit ImageTipped(_id, _image.hash, _image.description, _image.tipAmount, _author);
   } 
+
+  function tipPost(uint _id) public payable {
+
+    require(_id > 0 && _id <= postCount);
+    // Fetch the post
+    Post memory _post = posts[_id];
+    // Fetch the author
+    address payable _author = _post.author;
+    // Pay the author by sending them Ether
+    address(_author).transfer(msg.value);
+    // Increment the tip amount
+    _post.tipAmount = _post.tipAmount + msg.value;
+    // Update the post
+    posts[_id] = _post;
+
+    emit PostTipped(postCount, _post.content, _post.tipAmount, _author);
+  }
 
   
 }

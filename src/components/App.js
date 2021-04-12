@@ -44,7 +44,9 @@ class App extends Component {
 
       this.setState({ socialnetwork })
       const imagesCount = await socialnetwork.methods.imageCount().call()
+      const postCount = await socialnetwork.methods.postCount().call()
       this.setState({ imagesCount })
+      this.setState({ postCount })
       // Load images
       for (var i = 1; i <= imagesCount; i++) {
         const image = await socialnetwork.methods.images(i).call()
@@ -52,6 +54,13 @@ class App extends Component {
           images: [...this.state.images, image]
         })
       }
+      for (var i = 1; i <= postCount; i++) {
+        const post = await socialnetwork.methods.posts(i).call()
+        this.setState({
+          posts: [...this.state.posts, post]
+        })
+      }
+
       // Sort images. Show highest tipped images first
       this.setState({
         images: this.state.images.sort((a,b) => b.tipAmount - a.tipAmount )
@@ -97,6 +106,24 @@ class App extends Component {
     })
   }
 
+  createPost(content) {
+    this.setState({ loading: true })
+    this.state.socialnetwork.methods.createPost(content).send({ from: this.state.account })
+    .once('receipt', (receipt) => {
+      this.setState({ loading: false })
+    })
+    this.setState({loading: false})
+  };
+
+  tipPost(id, tipAmount) {
+    this.setState({ loading: true })
+    this.state.socialnetwork.methods.tipPost(id).send({ from: this.state.account, value: tipAmount })
+    .once('receipt', (receipt) => {
+      this.setState({ loading: false })
+    })
+    this.setState({loading: false})
+  }
+
   tipImageOwner(id, tipAmount){
     //console.log("TIP")
     this.setState({loading: true})
@@ -114,12 +141,16 @@ class App extends Component {
       account: '',
       socialnetwork: null,
       images: [],
+      postCount: 0,
+      posts: [],
       loading: true,
     }
 
     this.uploadImage = this.uploadImage.bind(this)
     this.tipImageOwner = this.tipImageOwner.bind(this)
     this.captureFile = this.captureFile.bind(this)
+    this.createPost = this.createPost.bind(this)
+    this.tipPost = this.tipPost.bind(this)
   }
 
   render() {
@@ -133,6 +164,10 @@ class App extends Component {
                 captureFile={this.captureFile}
                 uploadImage={this.uploadImage}
                 tipImageOwner={this.tipImageOwner}
+
+                posts={this.state.posts}
+                createPost={this.createPost}
+                tipPost={this.tipPost}
             
             />
           }
