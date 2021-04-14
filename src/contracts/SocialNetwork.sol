@@ -4,6 +4,7 @@ contract SocialNetwork {
   // Code goes here...
   uint public imageCount = 0;
   uint public postCount = 0;
+  uint public userCount = 0;
   string public name = "PRATIK";
 
 
@@ -11,6 +12,16 @@ contract SocialNetwork {
   mapping(uint => Image) public images;
 
   mapping(uint => Post) public posts;
+
+  mapping(address => User) public users;
+
+  struct User {
+    string username;
+    string email;
+    string password;
+    string about;
+    address payable user;
+  }
 
   struct Image{
     uint id;
@@ -26,6 +37,14 @@ contract SocialNetwork {
     uint tipAmount;
     address payable author;
   }
+
+  event UserCreated(
+    string username,
+    string email,
+    string password,
+    string about,
+    address payable user
+  );
 
   event ImageCreated(
     uint id,
@@ -91,6 +110,25 @@ contract SocialNetwork {
 
     // Trigger event
     emit PostCreated(postCount, _content, 0, msg.sender);
+  }
+
+  function createUser(string memory username, string memory email, string memory password_enc, string memory about) public {
+    // No need to check validity of arguments as they already have been checked on the frontend.
+
+    userCount++;
+    users[msg.sender] = User(username, email, password_enc, about, msg.sender);
+
+    emit UserCreated(username, email, password_enc, about, msg.sender);
+  }
+
+  function getUser(address id) public returns(address) {
+    
+    return users[id].user;
+  }
+
+  function updateAbout(string memory about) public {
+    User storage user = users[msg.sender]; 
+    user.about = about;
   }
 
   function tipImageOwner(uint _id) public payable {

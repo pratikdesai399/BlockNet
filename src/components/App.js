@@ -5,6 +5,7 @@ import './App.css';
 import SocialNetwork from '../abis/SocialNetwork.json'
 import Navbar from './Navbar'
 import Main from './Main'
+import Login from './Login'
 const ipfsClient = require('ipfs-http-client')
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' })
 
@@ -107,12 +108,12 @@ class App extends Component {
   }
 
   createPost(content) {
-    this.setState({ loading: true })
-    this.state.socialnetwork.methods.createPost(content).send({ from: this.state.account })
-    .once('receipt', (receipt) => {
-      this.setState({ loading: false })
-    })
-    this.setState({loading: false})
+    this.setState({ loading: true });
+      this.state.socialnetwork.methods.createPost(content).send({ from: this.state.account })
+      .once('receipt', (receipt) => {
+        this.setState({ loading: false })
+      })
+      this.setState({loading: false})
   };
 
   tipPost(id, tipAmount) {
@@ -133,6 +134,26 @@ class App extends Component {
     // this.setState({loading:false})
   }
 
+  async createUser(username, email, password, about) {
+    this.setState({loading: true}); 
+    const user = await this.state.socialnetwork.methods.getUser(this.state.account).call();
+    console.log(user + "user");
+    if(user == 0) {
+      this.state.socialnetwork.methods.createUser(username, email , password, about).send({ from: this.state.account })
+      .once('reciept', (receipt) => {
+        this.setState({ loading: false })
+      });
+      this.setState({ loading: false });
+
+      return true;
+    }
+    else {
+      //user already exists
+      console.log(this.state.account)
+      return false;
+    }
+  }
+
 
 
   constructor(props) {
@@ -144,6 +165,7 @@ class App extends Component {
       postCount: 0,
       posts: [],
       loading: true,
+      user: null
     }
 
     this.uploadImage = this.uploadImage.bind(this)
@@ -151,12 +173,13 @@ class App extends Component {
     this.captureFile = this.captureFile.bind(this)
     this.createPost = this.createPost.bind(this)
     this.tipPost = this.tipPost.bind(this)
+    this.createUser = this.createUser.bind(this)
   }
 
   render() {
     return (
       <div>
-        <Navbar account={this.state.account} />
+        {/* <Navbar account={this.state.account} />
         { this.state.loading
           ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
           : <Main
@@ -170,8 +193,10 @@ class App extends Component {
                 tipPost={this.tipPost}
             
             />
-          }
-        }
+        } */}
+        <Login 
+              createUser = {this.createUser}
+        />
       </div>
     );
   }
