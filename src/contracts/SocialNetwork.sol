@@ -15,6 +15,8 @@ contract SocialNetwork {
 
   mapping(address => User) public users;
 
+  mapping(string => bool) public usernames;
+
   struct User {
     string username;
     string email;
@@ -117,6 +119,7 @@ contract SocialNetwork {
 
     userCount++;
     users[msg.sender] = User(username, email, password_enc, about, msg.sender);
+    usernames[username] = true;
 
     emit UserCreated(username, email, password_enc, about, msg.sender);
   }
@@ -124,6 +127,14 @@ contract SocialNetwork {
   function getUser(address id) public returns(address) {
     
     return users[id].user;
+  }
+
+  function getUsername(string memory uname) public returns(bool) {
+    return usernames[uname];
+  }
+
+  function getCreds(address id) public returns(string memory username, string memory password) {
+    return (users[id].username, users[id].password);
   }
 
   function updateAbout(string memory about) public {

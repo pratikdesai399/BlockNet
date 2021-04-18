@@ -1,1 +1,12 @@
 /* Styles go here */
+
+.loginform, .regform {
+    margin: auto;
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    margin-top: 30px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: rgba(149, 165, 166, 0.1);
+}

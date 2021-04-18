@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
 import Identicon from 'identicon.js';
 import photo from '../photo.png'
+import { withRouter } from 'react-router-dom';
 
 class Navbar extends Component {
+
+  logout(e) {
+    e.preventDefault();
+    this.props.state(null)
+    this.props.history.push("/login");
+  }
+  constructor(props) {
+    super(props);
+    this.logout = this.logout.bind(this);
+  }
 
   render() {
     return (
@@ -32,9 +43,10 @@ class Navbar extends Component {
             }
           </li>
         </ul>
+        <a href="#" onClick={this.logout}>Log Out</a>
       </nav>
     );
   }
 }
 
-export default Navbar;
+export default withRouter(Navbar);
