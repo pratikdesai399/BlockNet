@@ -31,6 +31,8 @@ contract SocialNetwork {
     string description;
     uint tipAmount;
     address payable author;
+    uint likes;
+    uint dislikes;
   }
 
   struct Post {
@@ -38,6 +40,8 @@ contract SocialNetwork {
     string content;
     uint tipAmount;
     address payable author;
+    uint likes;
+    uint dislikes;
   }
 
   event UserCreated(
@@ -53,14 +57,18 @@ contract SocialNetwork {
     string hash,
     string description,
     uint tipAmount,
-    address payable author
+    address payable author,
+    uint likes,
+    uint dislikes
   );
 
   event PostCreated(
     uint id,
     string content,
     uint tipAmount,
-    address payable author
+    address payable author,
+    uint likes,
+    uint dislikes
   );
 
   event ImageTipped(
@@ -68,15 +76,55 @@ contract SocialNetwork {
     string hash,
     string description,
     uint tipAmount,
-    address payable author
+    address payable author,
+    uint likes,
+    uint dislikes
   );
 
   event PostTipped(
     uint id,
     string content,
     uint tipAmount,
-    address payable author
-  );  
+    address payable author,
+    uint likes,
+    uint dislikes
+  );
+
+  event ImageLiked(
+    uint id,
+    string hash,
+    string description,
+    uint tipAmount,
+    address payable author,
+    uint likes,
+    uint dislikes
+  ); 
+  event ImageDisliked(
+    uint id,
+    string hash,
+    string description,
+    uint tipAmount,
+    address payable author,
+    uint likes,
+    uint dislikes
+  ); 
+
+  event PostLiked(
+    uint id,
+    string content,
+    uint tipAmount,
+    address payable author,
+    uint likes,
+    uint dislikes
+  ); 
+  event PostDisliked(
+    uint id,
+    string content,
+    uint tipAmount,
+    address payable author,
+    uint likes,
+    uint dislikes
+  );
 
   //Creating Images
   function uploadImage(string memory _imgHash, string memory _description) public{
@@ -93,10 +141,10 @@ contract SocialNetwork {
     imageCount++;
 
     //Add image to contract
-    images[imageCount] = Image(imageCount,_imgHash,_description, 0, msg.sender);
+    images[imageCount] = Image(imageCount,_imgHash,_description, 0, msg.sender, 0, 0);
 
-    //Triger the event
-    emit ImageCreated(imageCount, _imgHash, _description, 0, msg.sender);
+    //Trigger the event
+    emit ImageCreated(imageCount, _imgHash, _description, 0, msg.sender, 0, 0);
 
   }
 
@@ -108,10 +156,10 @@ contract SocialNetwork {
     // Increment the post count
     postCount ++;
     // Create the post
-    posts[postCount] = Post(postCount, _content, 0, msg.sender);
+    posts[postCount] = Post(postCount, _content, 0, msg.sender, 0, 0);
 
     // Trigger event
-    emit PostCreated(postCount, _content, 0, msg.sender);
+    emit PostCreated(postCount, _content, 0, msg.sender, 0, 0);
   }
 
   function createUser(string memory username, string memory email, string memory password_enc, string memory about) public {
@@ -156,7 +204,7 @@ contract SocialNetwork {
     // Update the image
     images[_id] = _image;
     // Trigger an event
-    emit ImageTipped(_id, _image.hash, _image.description, _image.tipAmount, _author);
+    emit ImageTipped(_id, _image.hash, _image.description, _image.tipAmount, _author, _image.likes, _image.dislikes);
   } 
 
   function tipPost(uint _id) public payable {
@@ -173,8 +221,59 @@ contract SocialNetwork {
     // Update the post
     posts[_id] = _post;
 
-    emit PostTipped(postCount, _post.content, _post.tipAmount, _author);
+    emit PostTipped(postCount, _post.content, _post.tipAmount, _author, _post.likes, _post.dislikes);
   }
 
-  
+  function likeImage(uint _id) public payable {
+    // Make sure the id is valid
+    require(_id > 0 && _id <= imageCount);
+    // Fetch the image
+    Image memory _image = images[_id];
+    // Increment the likes
+    _image.likes = _image.likes + msg.value;
+    // Update the image
+    images[_id] = _image;
+    // Trigger an event
+    emit ImageLiked(_id, _image.hash, _image.description, _image.tipAmount, _image.author, _image.likes,_image.dislikes);
+  } 
+
+  function disLikeImage(uint _id) public payable {
+    // Make sure the id is valid
+    require(_id > 0 && _id <= imageCount);
+    // Fetch the image
+    Image memory _image = images[_id];
+    // Increment the dislikes
+    _image.dislikes = _image.dislikes + msg.value;
+    // Update the image
+    images[_id] = _image;
+    // Trigger an event
+    emit ImageDisliked(_id, _image.hash, _image.description, _image.tipAmount, _image.author, _image.likes,_image.dislikes);
+  }
+
+  function likePost(uint _id) public payable {
+
+    require(_id > 0 && _id <= postCount);
+    // Fetch the post
+    Post memory _post = posts[_id];
+    // Increment the likes
+    _post.likes = _post.likes + msg.value;
+    // Update the post
+    posts[_id] = _post;
+
+    emit PostLiked(postCount, _post.content, _post.tipAmount, _post.author,_post.likes,_post.dislikes);
+  }
+
+  function disLikePost(uint _id) public payable {
+
+    require(_id > 0 && _id <= postCount);
+    // Fetch the post
+    Post memory _post = posts[_id];
+    // Increment the dislikes
+    _post.dislikes = _post.dislikes + msg.value;
+    // Update the post
+    posts[_id] = _post;
+
+    emit PostDisliked(postCount, _post.content, _post.tipAmount, _post.author,_post.likes,_post.dislikes);
+  }
+
 }
