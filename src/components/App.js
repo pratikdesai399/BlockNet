@@ -142,6 +142,42 @@ class App extends Component {
     // this.setState({loading:false})
   }
 
+  likeImage(id, like_count){
+    this.setState({ loading: true })
+    this.state.socialnetwork.methods.likeImage(id).send({ from: this.state.account, value: like_count }).on('confirmation', (reciept) => {
+      this.setState({ loading: false })
+      window.location.reload()
+    })
+    this.setState({loading: false})
+  }  
+
+  disLikeImage(id, dislike_count){
+    this.setState({ loading: true })
+    this.state.socialnetwork.methods.disLikeImage(id).send({ from: this.state.account, value: dislike_count }).on('confirmation', (reciept) => {
+      this.setState({ loading: false })
+      window.location.reload()
+    })
+    this.setState({loading: false})
+  }
+
+  likePost(id, like_count){
+    this.setState({ loading: true })
+    this.state.socialnetwork.methods.likePost(id).send({ from: this.state.account, value: like_count }).on('confirmation', (reciept) => {
+      this.setState({ loading: false })
+      window.location.reload()
+    })
+    this.setState({loading: false})
+  }
+
+  disLikePost(id, dislike_count){
+    this.setState({ loading: true })
+    this.state.socialnetwork.methods.disLikePost(id).send({ from: this.state.account, value: dislike_count }).on('confirmation', (reciept) => {
+      this.setState({ loading: false })
+      window.location.reload()
+    })
+    this.setState({loading: false})
+  }
+
   async createUser(username, email, password, about) {
     this.setState({loading: true}); 
     const unique = await this.state.socialnetwork.methods.getUsername(username).call();
@@ -213,6 +249,10 @@ class App extends Component {
     this.loginUser = this.loginUser.bind(this)
     this.userCreds = this.userCreds.bind(this);
     this.switchUser = this.switchUser.bind(this);
+    this.likeImage = this.likeImage.bind(this)
+    this.disLikeImage = this.disLikeImage.bind(this)
+    this.likePost = this.likePost.bind(this)
+    this.disLikePost = this.disLikePost.bind(this)
   }
 
   render() {
@@ -239,11 +279,14 @@ class App extends Component {
                       captureFile={this.captureFile}
                       uploadImage={this.uploadImage}
                       tipImageOwner={this.tipImageOwner}
+                      likeImage={this.likeImage}
+                      disLikeImage={this.disLikeImage}
 
                       posts={this.state.posts}
                       createPost={this.createPost}
                       tipPost={this.tipPost}
-                  
+                      likePost={this.likePost}
+                      disLikePost={this.disLikePost}
                   />
               }
             </Route>

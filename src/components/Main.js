@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Identicon from 'identicon.js';
+import { Button } from 'react-bootstrap';
 
 class Main extends Component {
 
@@ -57,6 +58,7 @@ class Main extends Component {
                   <div className="card mb-4" key={key} >
                     <div className="card-header">
                       <img
+                        alt="img"
                         className='mr-2'
                         width='30'
                         height='30'
@@ -66,14 +68,14 @@ class Main extends Component {
                     </div>
                     <ul id="imageList" className="list-group list-group-flush">
                       <li className="list-group-item">
-                        <p className="text-center"><img src={`https://ipfs.infura.io/ipfs/${image.hash}`} style={{ maxWidth: '420px'}}/></p>
+                        <p className="text-center"><img alt="" src={`https://ipfs.infura.io/ipfs/${image.hash}`} style={{ maxWidth: '420px'}}/></p>
                         <p>{image.description}</p>
                       </li>
                       <li key={key} className="list-group-item py-2">
                         <small className="float-left mt-1 text-muted">
                           TIPS: {window.web3.utils.fromWei(image.tipAmount.toString(), 'Ether')} ETH
                         </small>
-                        <button
+                        <Button
                           className="btn btn-link btn-sm float-right pt-0"
                           name={image.id}
                           onClick={(event) => {
@@ -83,7 +85,38 @@ class Main extends Component {
                           }}
                         >
                           TIP 0.1 ETH
-                        </button>
+                        </Button>
+                      </li>
+                      <li key={key} className="list-group-item py-2">
+                        <small className="float-left mt-1 text-muted">
+                          Likes: {window.web3.utils.fromWei(image.likes.toString(), 'Ether')}
+                        </small>
+                        <Button variant="primary"
+                          className="btn btn-sm float-right pt-0"
+                          name={image.id}
+                          onClick={(event) => {
+                            let likeCount = window.web3.utils.toWei('1', 'Ether')
+                            console.log(event.target.name, likeCount)
+                            this.props.likeImage(event.target.name,likeCount)
+                          }}
+                        >
+                          Like</Button>
+                      </li>
+                      <li key={key} className="list-group-item py-2">
+                        <small className="float-left mt-1 text-muted">
+                          Dislikes: {window.web3.utils.fromWei(image.dislikes.toString(), 'Ether')}
+                        </small>
+                        <Button
+                          className="btn btn-sm float-right pt-0"
+                          name={image.id}
+                          onClick={(event) => {
+                            let disLikeCount = window.web3.utils.toWei('1', 'Ether')
+                            console.log(event.target.name, disLikeCount)
+                            this.props.disLikeImage(event.target.name,disLikeCount)
+                          }}
+                        >
+                          Dislike
+                        </Button>
                       </li>
                     </ul>
                   </div>
@@ -99,6 +132,7 @@ class Main extends Component {
                   <div className="card mb-4" key={key} >
                     <div className="card-header">
                       <img
+                        alt=""
                         className='mr-2'
                         width='30'
                         height='30'
@@ -114,7 +148,7 @@ class Main extends Component {
                         <small className="float-left mt-1 text-muted">
                           TIPS: {window.web3.utils.fromWei(post.tipAmount.toString(), 'Ether')} ETH
                         </small>
-                        <button
+                        <Button
                           className="btn btn-link btn-sm float-right pt-0"
                           name={post.id}
                           onClick={(event) => {
@@ -124,7 +158,39 @@ class Main extends Component {
                           }}
                         >
                           TIP 0.1 ETH
-                        </button>
+                        </Button>
+                      </li>
+                      <li key={key} className="list-group-item py-2">
+                        <small className="float-left mt-1 text-muted">
+                          Likes: {window.web3.utils.fromWei(post.likes.toString(), 'Ether')}
+                        </small>
+                        <Button
+                          className="btn btn-sm float-right pt-0"
+                          name={post.id}
+                          onClick={(event) => {
+                            let postLikeCount = window.web3.utils.toWei('1', 'Ether')
+                            console.log(event.target.name, postLikeCount)
+                            this.props.likePost(event.target.name, postLikeCount)
+                          }}
+                        >
+                          Like
+                        </Button>
+                      </li>
+                      <li key={key} className="list-group-item py-2">
+                        <small className="float-left mt-1 text-muted">
+                          Dislikes: {window.web3.utils.fromWei(post.dislikes.toString(), 'Ether')}
+                        </small>
+                        <Button
+                          className="btn btn-sm float-right pt-0"
+                          name={post.id}
+                          onClick={(event) => {
+                            let postDislikeCount = window.web3.utils.toWei('1', 'Ether')
+                            console.log(event.target.name, postDislikeCount)
+                            this.props.disLikePost(event.target.name, postDislikeCount)
+                          }}
+                        >
+                          Dislike
+                        </Button>
                       </li>
                     </ul>
                   </div>
