@@ -251,7 +251,7 @@ contract SocialNetwork {
     // Fetch the image
     Image memory _image = images[_id];
     // Increment the likes
-    _image.likes = _image.likes + msg.value;
+    _image.likes = _image.likes + (msg.value*10);
     // Update the image
     images[_id] = _image;
     // Trigger an event
@@ -264,7 +264,7 @@ contract SocialNetwork {
     // Fetch the image
     Image memory _image = images[_id];
     // Increment the dislikes
-    _image.dislikes = _image.dislikes + msg.value;
+    _image.dislikes = _image.dislikes + (msg.value*10);
     // Update the image
     images[_id] = _image;
     // Trigger an event
@@ -277,7 +277,7 @@ contract SocialNetwork {
     // Fetch the post
     Post memory _post = posts[_id];
     // Increment the likes
-    _post.likes = _post.likes + msg.value;
+    _post.likes = _post.likes + (msg.value*10);
     // Update the post
     posts[_id] = _post;
 
@@ -290,7 +290,7 @@ contract SocialNetwork {
     // Fetch the post
     Post memory _post = posts[_id];
     // Increment the dislikes
-    _post.dislikes = _post.dislikes + msg.value;
+    _post.dislikes = _post.dislikes + (msg.value*10);
     // Update the post
     posts[_id] = _post;
 

@@ -76,7 +76,7 @@ class Main extends Component {
                           TIPS: {window.web3.utils.fromWei(image.tipAmount.toString(), 'Ether')} ETH
                         </small>
                         <Button
-                          className="btn btn-link btn-sm float-right pt-0"
+                          className="btn btn-sm float-right pt-0"
                           name={image.id}
                           onClick={(event) => {
                             let tipAmount = window.web3.utils.toWei('0.1', 'Ether')
@@ -95,7 +95,7 @@ class Main extends Component {
                           className="btn btn-sm float-right pt-0"
                           name={image.id}
                           onClick={(event) => {
-                            let likeCount = window.web3.utils.toWei('1', 'Ether')
+                            let likeCount = window.web3.utils.toWei('0.1', 'Ether')
                             console.log(event.target.name, likeCount)
                             this.props.likeImage(event.target.name,likeCount)
                           }}
@@ -110,7 +110,7 @@ class Main extends Component {
                           className="btn btn-sm float-right pt-0"
                           name={image.id}
                           onClick={(event) => {
-                            let disLikeCount = window.web3.utils.toWei('1', 'Ether')
+                            let disLikeCount = window.web3.utils.toWei('0.1', 'Ether')
                             console.log(event.target.name, disLikeCount)
                             this.props.disLikeImage(event.target.name,disLikeCount)
                           }}
@@ -149,7 +149,7 @@ class Main extends Component {
                           TIPS: {window.web3.utils.fromWei(post.tipAmount.toString(), 'Ether')} ETH
                         </small>
                         <Button
-                          className="btn btn-link btn-sm float-right pt-0"
+                          className="btn btn-sm float-right pt-0"
                           name={post.id}
                           onClick={(event) => {
                             let tipAmount = window.web3.utils.toWei('0.1', 'Ether')
@@ -168,7 +168,7 @@ class Main extends Component {
                           className="btn btn-sm float-right pt-0"
                           name={post.id}
                           onClick={(event) => {
-                            let postLikeCount = window.web3.utils.toWei('1', 'Ether')
+                            let postLikeCount = window.web3.utils.toWei('0.1', 'Ether')
                             console.log(event.target.name, postLikeCount)
                             this.props.likePost(event.target.name, postLikeCount)
                           }}
@@ -184,7 +184,7 @@ class Main extends Component {
                           className="btn btn-sm float-right pt-0"
                           name={post.id}
                           onClick={(event) => {
-                            let postDislikeCount = window.web3.utils.toWei('1', 'Ether')
+                            let postDislikeCount = window.web3.utils.toWei('0.1', 'Ether')
                             console.log(event.target.name, postDislikeCount)
                             this.props.disLikePost(event.target.name, postDislikeCount)
                           }}
