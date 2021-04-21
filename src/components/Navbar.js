@@ -5,15 +5,41 @@ import { withRouter } from 'react-router-dom';
 
 class Navbar extends Component {
 
+
   logout(e) {
     e.preventDefault();
     this.props.state(null)
     this.props.history.push("/login");
   }
+
+  openProfile(e) {
+    e.preventDefault();
+    if(this.state.profileView === false) {
+      this.setState({
+        profileView: true
+      })
+      this.props.history.push("/profile");
+    }
+  }
+
+  openDashboard(e) {
+    e.preventDefault();
+    this.setState({
+      profileView: false
+    })
+    this.props.history.push("/dashboard");
+  }
+
   constructor(props) {
     super(props);
+    this.state = {
+      profileView: false
+    }
     this.logout = this.logout.bind(this);
+    this.openProfile = this.openProfile.bind(this);
+    this.openDashboard = this.openDashboard.bind(this);
   }
+
 
   render() {
     return (
@@ -25,12 +51,19 @@ class Navbar extends Component {
           rel="noopener noreferrer"
         >
           <img src={photo} width="30" height="30" className="d-inline-block align-top" alt="" />
-         SOCIAL NETWORK
+         BlockNet
         </a>
         <ul className="navbar-nav px-3">
+          {
+            this.state.profileView && (
+            <li>
+              <a href="#" onClick={this.openDashboard}>Dashboard</a>
+            </li>
+            )
+          }
           <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
             <small className="text-secondary">
-              <small id="account">{this.props.account}</small>
+              <small id="account" onClick={openProfile}>{this.props.account}</small>
             </small>
             { this.props.account
               ? <img
@@ -42,8 +75,10 @@ class Navbar extends Component {
               : <span></span>
             }
           </li>
+          <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
+            <a href="#" onClick={this.logout}>Log Out</a>
+          </li>
         </ul>
-        <a href="#" onClick={this.logout}>Log Out</a>
       </nav>
     );
   }

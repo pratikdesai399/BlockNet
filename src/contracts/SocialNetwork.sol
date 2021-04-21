@@ -181,8 +181,13 @@ contract SocialNetwork {
     return usernames[uname];
   }
 
-  function getCreds(address id) public returns(string memory username, string memory password) {
-    return (users[id].username, users[id].password);
+  function getUserDetails(address id) public returns(
+    string memory username, 
+    string memory email,
+    string memory password,
+    string memory about
+    ) {
+    return (users[id].username, users[id].email, users[id].password, users[id].about);
   }
 
   function updateAbout(string memory about) public {

@@ -13,6 +13,7 @@ import Navbar from './Navbar'
 import Main from './Main'
 import Register from './Register'
 import Login from './Login'
+import Profile from './Profile'
 const ipfsClient = require('ipfs-http-client')
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' })
 
@@ -20,6 +21,13 @@ const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' 
 class App extends Component {
 
   async componentWillMount(){
+    try {
+      window.ethereum.on('accountsChanged', acc => {
+        await this.loadWeb3()
+      })
+    } catch(err) {
+      console.log(err);
+    }
     await this.loadWeb3()
     await this.loadBlockchainData()
   }
@@ -186,7 +194,6 @@ class App extends Component {
       return false;
     }
     const user = await this.state.socialnetwork.methods.getUser(this.state.account).call();
-    console.log(user + "user");
     if(user === "0x0000000000000000000000000000000000000000") {
       this.state.socialnetwork.methods.createUser(username, email , password, about).send({ from: this.state.account })
       .once('reciept', (receipt) => {
@@ -212,8 +219,7 @@ class App extends Component {
   }
 
   async userCreds(userid) {
-    const {username, password} = await this.state.socialnetwork.methods.getCreds(this.state.account).call();
-    console.log(username, password)
+    const {username, email, password, about} = await this.state.socialnetwork.methods.getUserDetails(this.state.account).call();
     return ({
       username,
       password
@@ -226,7 +232,26 @@ class App extends Component {
     });
   }
 
+  async getUserDetails() {
+    const { username, email, password, about } = await this.state.socialnetwork.methods.getUserDetails(this.state.account).call();
+    return ({
+      userid: this.state.account,
+      username,
+      email,
+      password,
+      about
+    })
+  }
 
+  changeUserDetails(newUser) {
+    const { email, password, about } = newUser;
+    this.setState({ loading: true });
+    this.state.socialnetwork.methods.setUserDetails(email, password, about).send({ from: this.state.account })
+    .once('reciept', res => {
+      this.setState({ loading: false })
+    });
+    this.setState({ loading: false });
+  }
 
   constructor(props) {
     super(props)
@@ -253,6 +278,8 @@ class App extends Component {
     this.disLikeImage = this.disLikeImage.bind(this)
     this.likePost = this.likePost.bind(this)
     this.disLikePost = this.disLikePost.bind(this)
+    this.getUserDetails = this.getUserDetails.bind(this);
+    this.changeUserDetails = this.changeUserDetails.bind(this);
   }
 
   render() {
@@ -263,7 +290,7 @@ class App extends Component {
             <Route path="/" exact render={() => {
               return(
                 this.state.user ?
-                <Redirect to="/Dashboard" /> :
+                <Redirect to="/dashboard" /> :
                 <Redirect to="/login" />
               )
             }} />
@@ -300,6 +327,12 @@ class App extends Component {
             <Route exact path="/register">
               <Register 
                 createUser = {this.createUser}
+              />
+            </Route>
+            <Route exact path="/profile">
+              <Profile 
+                    getUser = {this.getUserDetails}
+                    changeUserDetails = {this.changeUserDetails}
               />
             </Route>
             <Route path="*">
