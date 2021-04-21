@@ -23,7 +23,7 @@ class App extends Component {
   async componentWillMount(){
     try {
       window.ethereum.on('accountsChanged', acc => {
-        await this.loadWeb3()
+        this.loadWeb3()
       })
     } catch(err) {
       console.log(err);
@@ -330,6 +330,10 @@ class App extends Component {
               />
             </Route>
             <Route exact path="/profile">
+              <Navbar 
+                  account={this.state.account}
+                  state = {this.switchUser}
+              />
               <Profile 
                     getUser = {this.getUserDetails}
                     changeUserDetails = {this.changeUserDetails}

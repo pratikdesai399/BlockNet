@@ -126,6 +126,13 @@ contract SocialNetwork {
     uint dislikes
   );
 
+  event ProfileUpdated(
+    address userid,
+    string email,
+    string password,
+    string about
+  );
+
   //Creating Images
   function uploadImage(string memory _imgHash, string memory _description) public{
 
@@ -188,6 +195,15 @@ contract SocialNetwork {
     string memory about
     ) {
     return (users[id].username, users[id].email, users[id].password, users[id].about);
+  }
+
+  function setUserDetails(string memory email, string memory password, string memory about) public {
+    User storage user = users[msg.sender];
+    user.email = email;
+    user.password = password;
+    user.about = about;
+
+    emit ProfileUpdated(msg.sender, email, password, about);
   }
 
   function updateAbout(string memory about) public {

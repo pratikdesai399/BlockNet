@@ -1,36 +1,32 @@
 import React, { useEffect, useState } from 'react'
-import { Form } from 'react-bootstrap';
+import { Form, InputGroup, Button, Col } from 'react-bootstrap';
 
 
 const Profile = ({ getUser, changeUserDetails }) => {
     const [userInfo, setUserInfo] = useState({
-        userid: null,
-        username: null,
-        about: null,
+        userid: '',
+        username: '',
+        about: '',
         posts: []
     })
     const [updatedInfo, setUpdatedInfo] = useState({
-        email: null,
-        password: null,
-        about: null
+        email: undefined,
+        password: undefined,
+        about: undefined
     })
 
     useEffect(() => {
-        const getUserData = () => {
-            getUser().then(user => {
-                setUserInfo({
-                    userid: user.userid,
-                    username: user.username,
-                    email: user.email,
-                    password: user.password,
-                    about: user.about
-                });
-            }).catch(err => {
-                console.log(err);
+        getUser().then(user => {
+            setUserInfo({
+                userid: user.userid,
+                username: user.username,
+                email: user.email,
+                password: user.password,
+                about: user.about
             });
-        }
-
-        getUserData();
+        }).catch(err => {
+            console.log(err);
+        });
     })
 
     const handleSubmit = (e) => {
@@ -43,8 +39,8 @@ const Profile = ({ getUser, changeUserDetails }) => {
     }
 
     return (
-        <div className="profileForm">
-            <div style="textAlign: center">
+        <div className="profileForm mt-5 container-fluid">
+            <div>
                 <h3>User Id</h3>
                 <h4>{userInfo.userid}</h4>
             </div>
@@ -73,16 +69,9 @@ const Profile = ({ getUser, changeUserDetails }) => {
                             value={updatedInfo.password}
                             placeholder="Update Password (min. 8 characters)"
                             onChange={e => {
-                                if(!e.target.value) {
-                                    setUpdatedInfo({
-                                        password: userInfo.password
-                                    })
-                                }
-                                else {
-                                    setUpdatedInfo({
-                                        password: e.target.value
-                                    })}
-                                }
+                                setUpdatedInfo({
+                                    password: e.target.value
+                                })}
                             }   
                             minLength="8"
                         />
@@ -90,41 +79,33 @@ const Profile = ({ getUser, changeUserDetails }) => {
                 </Form.Row>
                 <Form.Group>
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control 
-                        type="email" 
-                        value={updatedInfo.email}
-                        placeholder={userInfo.email}
-                        onChange={e => {
-                            if(!e.target.value) {
-                                setUpdatedInfo({
-                                    email: userInfo.email
-                                })
-                            }
-                            else {
+                    <InputGroup className="mb-2">    
+                        <InputGroup.Prepend>
+                            <InputGroup.Text>{userInfo.email}</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <Form.Control 
+                            type="email" 
+                            value={updatedInfo.email}
+                            placeholder={userInfo.email}
+                            onChange={e => {
                                 setUpdatedInfo({
                                     email: e.target.value
                                 })}
                             }
-                        }
-                    />
+                        />
+                    </InputGroup>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>About</Form.Label>
                     <Form.Control 
                         onChange={e => {
-                            if(!e.target.value) {
-                                setUpdatedInfo({
-                                    about: userInfo.about
-                                })
-                            }
-                            else {
-                                setUpdatedInfo({ about: e.target.value })
-                            }
+                            setUpdatedInfo({ about: e.target.value })
                         }}
-                        value={userInfo.about}  
+                        value={updatedInfo.about}
+                        placeholder={userInfo.about}  
                     />
                 </Form.Group>
-                <Button variant="Info" type="submit" className="btn-lg btn-block mt-4">
+                <Button variant="info" type="submit" className="btn-lg btn-block mt-4">
                     Update User Info.
                 </Button>
             </Form>
