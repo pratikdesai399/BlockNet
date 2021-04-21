@@ -111,26 +111,28 @@ class App extends Component {
       this.setState({ loading: true })
       this.state.socialnetwork.methods.uploadImage(result[0].hash, description).send({ from: this.state.account }).on('transactionHash', (hash) => {
         this.setState({ loading: false })
+        window.location.reload()
       })
     })
+    
   }
 
   createPost(content) {
     this.setState({ loading: true });
-      this.state.socialnetwork.methods.createPost(content).send({ from: this.state.account })
-      .once('receipt', (receipt) => {
-        this.setState({ loading: false })
-      })
-      this.setState({loading: false})
+      this.state.socialnetwork.methods.createPost(content).send({ from: this.state.account }).on('confirmation', (reciept) => {
+      this.setState({ loading: false })
+      window.location.reload()
+    })
+    this.setState({loading: false})
   };
 
   tipPost(id, tipAmount) {
     this.setState({ loading: true })
-    this.state.socialnetwork.methods.tipPost(id).send({ from: this.state.account, value: tipAmount })
-    .once('receipt', (receipt) => {
+    this.state.socialnetwork.methods.tipPost(id).send({ from: this.state.account, value: tipAmount }).on('transactionHash', (hash) => {
       this.setState({ loading: false })
+      window.location.reload()
     })
-    this.setState({loading: false})
+    this.setState({loading:false})
   }
 
   tipImageOwner(id, tipAmount){
@@ -138,8 +140,9 @@ class App extends Component {
     this.setState({loading: true})
     this.state.socialnetwork.methods.tipImageOwner(id).send({ from: this.state.account, value: tipAmount }).on('transactionHash', (hash) => {
       this.setState({ loading: false })
+      window.location.reload()
     })
-    // this.setState({loading:false})
+    this.setState({loading:false})
   }
 
   likeImage(id, like_count){
