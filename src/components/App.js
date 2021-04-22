@@ -53,8 +53,10 @@ class App extends Component {
       this.setState({ socialnetwork })
       const imagesCount = await socialnetwork.methods.imageCount().call()
       const postCount = await socialnetwork.methods.postCount().call()
+      const userCount = await socialnetwork.methods.userCount().call()
       this.setState({ imagesCount })
       this.setState({ postCount })
+      this.setState({userCount})
       // Load images
       for (var i = 1; i <= imagesCount; i++) {
         const image = await socialnetwork.methods.images(i).call()
@@ -72,6 +74,11 @@ class App extends Component {
       // Sort images. Show highest tipped images first
       this.setState({
         images: this.state.images.sort((a,b) => b.tipAmount - a.tipAmount )
+      })
+      this.setState({ loading: false})
+
+      this.setState({
+        posts: this.state.posts.sort((a,b) => b.tipAmount - a.tipAmount )
       })
       this.setState({ loading: false})
 
@@ -237,7 +244,8 @@ class App extends Component {
       postCount: 0,
       posts: [],
       loading: true,
-      user: null
+      user: null,
+      userCount: 0
     }
 
     this.uploadImage = this.uploadImage.bind(this)

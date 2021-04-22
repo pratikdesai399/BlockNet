@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Identicon from 'identicon.js';
 import { Button } from 'react-bootstrap';
+import SideNav, {MenuIcon} from 'react-simple-sidenav';
 
 class Main extends Component {
 
@@ -8,7 +9,14 @@ class Main extends Component {
     return (
       <div className="container-fluid mt-5">
         <div className="row">
-          <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '500px' }}>
+
+          
+
+
+
+
+
+          <main className='col-sm' role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '500px' }}>
             <div className="content mr-auto ml-auto">
               <p>&nbsp;</p>
               <h2>UPLOAD YOUR IMAGE HERE</h2>
@@ -199,7 +207,12 @@ class Main extends Component {
 
             </div>
           </main>
+
+          
+        
         </div>
+
+        
       </div>
       
     );
