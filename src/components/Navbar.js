@@ -2,11 +2,7 @@ import React, { Component } from 'react';
 import Identicon from 'identicon.js';
 import photo from '../photo.png'
 import { withRouter } from 'react-router-dom';
-<<<<<<< HEAD
 import { Navbar as BNavbar, Nav, NavDropdown } from 'react-bootstrap';
-=======
-import {Nav,Navbar} from 'react-bootstrap';
->>>>>>> 31ac1901c28f3ab139766d03c4692257dcc44588
 
 class navbar extends Component {
 
