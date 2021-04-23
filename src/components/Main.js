@@ -13,6 +13,11 @@ class Main extends Component {
         <Row>
 
         <Col>
+        <div className="content mr-auto ml-auto">
+           
+            <br></br>
+            <Button size="lg" variant="outline-primary"><a href='/video'>GO TO REELS PAGE</a></Button>
+          </div>
         
                     <ListGroup variant="flush">
                       <br></br>
@@ -29,45 +34,14 @@ class Main extends Component {
             <Col xs={5}>
             <div className="content mr-auto ml-auto">
               <p>&nbsp;</p>
-              <h2>UPLOAD YOUR IMAGE HERE</h2>
-              <form onSubmit={(event) => {
-                event.preventDefault()
-                const description = this.imageDescription.value
-                this.props.uploadImage(description)
-              }} >
-                <input type='file' accept=".jpg, .jpeg, .png, .bmp, .gif" onChange={this.props.captureFile} />
-                  <div className="form-group mr-sm-2">
-                    <br></br>
-                      <input
-                        id="imageDescription"
-                        type="text"
-                        ref={(input) => { this.imageDescription = input }}
-                        className="form-control"
-                        placeholder="Image description..."
-                        required />
-                  </div>
-                <button type="submit" className="btn btn-success btn-block btn-lg">POST</button>
-              </form>
 
 
-              <br></br>
-              <h2>WRITE YOUR POST HERE</h2>
-              <form onSubmit={(event) => {
-    event.preventDefault()
-    const content = this.postContent.value
-    this.props.createPost(content)
-  }}>
-  <div className="form-group mr-sm-2">
-    <input
-      id="postContent"
-      type="text"
-      ref={(input) => { this.postContent = input }}
-      className="form-control"
-      placeholder="What's on your mind?"
-      required />
-  </div>
-  <button type="submit" className="btn btn-primary btn-block">Share</button>
-</form>
+
+              
+
+
+              
+              
 
               <p>&nbsp;</p>
                 
@@ -222,13 +196,51 @@ class Main extends Component {
           <div className="content mr-auto ml-auto">
            
             <br></br>
-            <Button size="lg" variant="outline-primary">Upload Post</Button>
+            {/* <Button size="lg" variant="outline-primary">Upload Post</Button> */}
+            <h2>UPLOAD YOUR IMAGE HERE</h2>
+              <form onSubmit={(event) => {
+                event.preventDefault()
+                const description = this.imageDescription.value
+                this.props.uploadImage(description)
+              }} >
+                <input type='file' accept=".jpg, .jpeg, .png, .bmp, .gif" onChange={this.props.captureFile} />
+                  <div className="form-group mr-sm-2">
+                    <br></br>
+                      <input
+                        id="imageDescription"
+                        type="text"
+                        ref={(input) => { this.imageDescription = input }}
+                        className="form-control"
+                        placeholder="Image description..."
+                        required />
+                  </div>
+                <button type="submit" className="btn btn-success btn-block btn-lg">POST</button>
+              </form>
           </div>
-          <div className="content mr-auto ml-auto">
-           
-            <br></br>
-            <Button size="lg" variant="outline-primary">Upload Reels</Button>
+
+          <div className='content mr-auto ml-auto'>
+          <h2>WRITE YOUR POST HERE</h2>
+              <form onSubmit={(event) => {
+    event.preventDefault()
+    const content = this.postContent.value
+    this.props.createPost(content)
+  }}>
+  <div className="form-group mr-sm-2">
+    <input
+      id="postContent"
+      type="text"
+      ref={(input) => { this.postContent = input }}
+      className="form-control"
+      placeholder="What's on your mind?"
+      required />
+  </div>
+  <button type="submit" className="btn btn-primary btn-block">Share</button>
+</form>
+
           </div>
+
+
+          
             
           </Col>
           </Row>
