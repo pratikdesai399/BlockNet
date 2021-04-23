@@ -1,22 +1,32 @@
 import React, { Component } from 'react';
 import Identicon from 'identicon.js';
-import { Button } from 'react-bootstrap';
-import SideNav, {MenuIcon} from 'react-simple-sidenav';
+import { Button,Container,Row,Col,ListGroup} from 'react-bootstrap';
+// import SideNav, {MenuIcon} from 'react-simple-sidenav';
 
 class Main extends Component {
 
   render() {
     return (
-      <div className="container-fluid mt-5">
-        <div className="row">
+      
+      <Container fluid>
+        
+        <Row>
 
-          
-
-
-
-
-
-          <main className='col-sm' role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '500px' }}>
+        <Col>
+        
+                    <ListGroup variant="flush">
+                      <br></br>
+                      <ListGroup.Item as="li" active>User List</ListGroup.Item>
+                      <ListGroup.Item>Cras justo odio</ListGroup.Item>
+                      <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
+                      <ListGroup.Item>Morbi leo risus</ListGroup.Item>
+                      <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
+                      <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                      
+                    </ListGroup>
+                
+                  </Col>
+            <Col xs={5}>
             <div className="content mr-auto ml-auto">
               <p>&nbsp;</p>
               <h2>UPLOAD YOUR IMAGE HERE</h2>
@@ -128,6 +138,7 @@ class Main extends Component {
                       </li>
                     </ul>
                   </div>
+                  
                 )
               })}
 
@@ -206,14 +217,24 @@ class Main extends Component {
               })}
 
             </div>
-          </main>
+          </Col>
+          <Col>
+          <div className="content mr-auto ml-auto">
+           
+            <br></br>
+            <Button size="lg" variant="outline-primary">Upload Post</Button>
+          </div>
+          <div className="content mr-auto ml-auto">
+           
+            <br></br>
+            <Button size="lg" variant="outline-primary">Upload Reels</Button>
+          </div>
+            
+          </Col>
+          </Row>
 
-          
         
-        </div>
-
-        
-      </div>
+        </Container>
       
     );
   }
