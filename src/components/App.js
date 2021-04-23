@@ -14,6 +14,7 @@ import Main from './Main'
 import Register from './Register'
 import Login from './Login'
 import Profile from './Profile'
+import Video from './Video'
 const ipfsClient = require('ipfs-http-client')
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' })
 
@@ -61,8 +62,30 @@ class App extends Component {
       this.setState({ socialnetwork })
       const imagesCount = await socialnetwork.methods.imageCount().call()
       const postCount = await socialnetwork.methods.postCount().call()
+      const userCount = await socialnetwork.methods.userCount().call()
+      const videosCount = await socialnetwork.methods.videoCount().call()
       this.setState({ imagesCount })
       this.setState({ postCount })
+      this.setState({userCount})
+      this.setState({ videosCount })
+
+      // Load videos, sort by newest
+      for (var i=videosCount; i>=1; i--) {
+        const video = await socialnetwork.methods.videos(i).call()
+        this.setState({
+          videos: [...this.state.videos, video]
+        })
+      }
+
+      //Set latest video with title to view as default 
+      const latest = await socialnetwork.methods.videos(videosCount).call()
+      this.setState({
+        currentHash: latest.hash,
+        currentTitle: latest.title
+      })
+      this.setState({ loading: false})
+
+      
       // Load images
       for (var i = 1; i <= imagesCount; i++) {
         const image = await socialnetwork.methods.images(i).call()
@@ -80,6 +103,11 @@ class App extends Component {
       // Sort images. Show highest tipped images first
       this.setState({
         images: this.state.images.sort((a,b) => b.tipAmount - a.tipAmount )
+      })
+      this.setState({ loading: false})
+
+      this.setState({
+        posts: this.state.posts.sort((a,b) => b.tipAmount - a.tipAmount )
       })
       this.setState({ loading: false})
 
@@ -103,6 +131,29 @@ class App extends Component {
       this.setState({ buffer: Buffer(reader.result) })
       console.log('buffer', this.state.buffer)
     }
+  }
+
+  uploadVideo = title => {
+    console.log("Submitting file to IPFS...")
+
+    //adding file to the IPFS
+    ipfs.add(this.state.buffer, (error, result) => {
+      console.log('IPFS result', result)
+      if(error) {
+        console.error(error)
+        return
+      }
+
+      this.setState({ loading: true })
+      this.state.socialnetwork.methods.uploadVideo(result[0].hash, title).send({ from: this.state.account }).on('transactionHash', (hash) => {
+        this.setState({ loading: false })
+      })
+    })
+  }
+
+  changeVideo = (hash, title) => {
+    this.setState({'currentHash': hash});
+    this.setState({'currentTitle': title});
   }
 
   uploadImage = description => {
@@ -280,7 +331,12 @@ class App extends Component {
       postCount: 0,
       posts: [],
       loading: true,
-      user: null
+      user: null,
+      userCount: 0,
+      videos: [],
+      buffer: null,
+      currentHash: null,
+      currentTitle: null
     }
 
     this.uploadImage = this.uploadImage.bind(this)
@@ -298,6 +354,8 @@ class App extends Component {
     this.disLikePost = this.disLikePost.bind(this)
     this.getUserDetails = this.getUserDetails.bind(this);
     this.changeUserDetails = this.changeUserDetails.bind(this);
+    this.uploadVideo = this.uploadVideo.bind(this)
+    this.changeVideo = this.changeVideo.bind(this)
   }
 
   render() {
@@ -305,6 +363,22 @@ class App extends Component {
       <Router>
         <div>
           <Switch>
+            <Route exact path='/video'>
+            <Navbar 
+          account={this.state.account}
+        />
+        { this.state.loading
+          ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
+          : <Video
+              videos={this.state.videos}
+              uploadVideo={this.uploadVideo}
+              captureFile={this.captureFile}
+              changeVideo={this.changeVideo}
+              currentHash={this.state.currentHash}
+              currentTitle={this.state.currentTitle}
+            />
+        }
+            </Route>
             <Route path="/" exact render={() => {
               console.log(this.state.user);
               return(

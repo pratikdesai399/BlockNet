@@ -1,55 +1,47 @@
 import React, { Component } from 'react';
 import Identicon from 'identicon.js';
-import { Button } from 'react-bootstrap';
+import { Button,Container,Row,Col,ListGroup} from 'react-bootstrap';
+// import SideNav, {MenuIcon} from 'react-simple-sidenav';
 
 class Main extends Component {
 
   render() {
     return (
-      <div className="container-fluid mt-5">
-        <div className="row">
-          <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '500px' }}>
+      
+      <Container fluid>
+        
+        <Row>
+
+        <Col>
+        <div className="content mr-auto ml-auto position-fixed">
+           
+            <br></br>
+            <Button size="lg" variant="outline-primary"><a href='/video'>GO TO REELS PAGE</a></Button>
+          </div><br /><br /><br />
+        
+                    <ListGroup variant="flush" className="position-fixed">
+                      <br></br>
+                      <ListGroup.Item as="li" active>User List</ListGroup.Item>
+                      <ListGroup.Item>Cras justo odio</ListGroup.Item>
+                      <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
+                      <ListGroup.Item>Morbi leo risus</ListGroup.Item>
+                      <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
+                      <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                      
+                    </ListGroup>
+                
+                  </Col>
+            <Col xs={5}>
             <div className="content mr-auto ml-auto">
               <p>&nbsp;</p>
-              <h2>UPLOAD YOUR IMAGE HERE</h2>
-              <form onSubmit={(event) => {
-                event.preventDefault()
-                const description = this.imageDescription.value
-                this.props.uploadImage(description)
-              }} >
-                <input type='file' accept=".jpg, .jpeg, .png, .bmp, .gif" onChange={this.props.captureFile} />
-                  <div className="form-group mr-sm-2">
-                    <br></br>
-                      <input
-                        id="imageDescription"
-                        type="text"
-                        ref={(input) => { this.imageDescription = input }}
-                        className="form-control"
-                        placeholder="Image description..."
-                        required />
-                  </div>
-                <button type="submit" className="btn btn-success btn-block btn-lg">POST</button>
-              </form>
 
 
-              <br></br>
-              <h2>WRITE YOUR POST HERE</h2>
-              <form onSubmit={(event) => {
-    event.preventDefault()
-    const content = this.postContent.value
-    this.props.createPost(content)
-  }}>
-  <div className="form-group mr-sm-2">
-    <input
-      id="postContent"
-      type="text"
-      ref={(input) => { this.postContent = input }}
-      className="form-control"
-      placeholder="What's on your mind?"
-      required />
-  </div>
-  <button type="submit" className="btn btn-primary btn-block">Share</button>
-</form>
+
+              
+
+
+              
+              
 
               <p>&nbsp;</p>
                 
@@ -120,6 +112,7 @@ class Main extends Component {
                       </li>
                     </ul>
                   </div>
+                  
                 )
               })}
 
@@ -198,9 +191,61 @@ class Main extends Component {
               })}
 
             </div>
-          </main>
-        </div>
-      </div>
+          </Col>
+          <Col>
+          <div className="position-fixed">
+          <div className="content mr-auto ml-auto ">
+           
+           <br></br>
+           {/* <Button size="lg" variant="outline-primary">Upload Post</Button> */}
+           <h2>UPLOAD YOUR IMAGE HERE</h2>
+             <form onSubmit={(event) => {
+               event.preventDefault()
+               const description = this.imageDescription.value
+               this.props.uploadImage(description)
+             }} >
+               <input type='file' accept=".jpg, .jpeg, .png, .bmp, .gif" onChange={this.props.captureFile} />
+                 <div className="form-group mr-sm-2">
+                   <br></br>
+                     <input
+                       id="imageDescription"
+                       type="text"
+                       ref={(input) => { this.imageDescription = input }}
+                       className="form-control"
+                       placeholder="Image description..."
+                       required />
+                 </div>
+               <button type="submit" className="btn btn-success btn-block btn-lg">POST</button>
+             </form>
+         </div>
+
+         <div className='content mr-auto ml-auto'><br />
+         <h2>WRITE YOUR POST HERE</h2>
+             <form onSubmit={(event) => {
+   event.preventDefault()
+   const content = this.postContent.value
+   this.props.createPost(content)
+ }}>
+ <div className="form-group mr-sm-2">
+   <input
+     id="postContent"
+     type="text"
+     ref={(input) => { this.postContent = input }}
+     className="form-control"
+     placeholder="What's on your mind?"
+     required />
+ </div>
+ <button type="submit" className="btn btn-primary btn-block">Share</button>
+</form>
+
+         </div>
+          </div>
+            
+          </Col>
+          </Row>
+
+        
+        </Container>
       
     );
   }
