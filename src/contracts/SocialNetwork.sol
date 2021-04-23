@@ -127,7 +127,7 @@ contract SocialNetwork {
   );
 
   event ProfileUpdated(
-    address userid,
+    address payable userid,
     string email,
     string password,
     string about
@@ -194,7 +194,8 @@ contract SocialNetwork {
     string memory password,
     string memory about
     ) {
-    return (users[id].username, users[id].email, users[id].password, users[id].about);
+    User storage user = users[id];
+    return (user.username, user.email, user.password, user.about);
   }
 
   function setUserDetails(string memory email, string memory password, string memory about) public {

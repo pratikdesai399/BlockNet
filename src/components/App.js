@@ -233,10 +233,18 @@ class App extends Component {
     this.setState({
       user: newval
     });
+    if(!newval) {
+      localStorage.removeItem("user-auth");
+    }
+    else {
+      localStorage.setItem("user-auth", newval);
+    }
   }
 
   async getUserDetails() {
+    this.setState({loading: true});
     const { username, email, password, about } = await this.state.socialnetwork.methods.getUserDetails(this.state.account).call();
+    this.setState({loading: false});
     return ({
       userid: this.state.account,
       username,
@@ -246,14 +254,21 @@ class App extends Component {
     })
   }
 
-  changeUserDetails(newUser) {
+  async changeUserDetails(newUser) {
     const { email, password, about } = newUser;
+    let email_ver, pass_ver, about_ver;
+    const user = await this.getUserDetails();
+    email_ver = email === "" ? user.email : email;
+    pass_ver = password === "" ? user.password : password;
+    about_ver = about === "" ? user.about : about;
     this.setState({ loading: true });
-    this.state.socialnetwork.methods.setUserDetails(email, password, about).send({ from: this.state.account })
-    .once('reciept', res => {
+    this.state.socialnetwork.methods.setUserDetails(email_ver, pass_ver, about_ver).send({ from: this.state.account })
+    .once('confirmation', res => {
       this.setState({ loading: false })
     });
+    const update = await this.getUserDetails();
     this.setState({ loading: false });
+    return (update);
   }
 
   constructor(props) {
@@ -291,8 +306,9 @@ class App extends Component {
         <div>
           <Switch>
             <Route path="/" exact render={() => {
+              console.log(this.state.user);
               return(
-                this.state.user ?
+                localStorage.getItem("user-auth") ?
                 <Redirect to="/dashboard" /> :
                 <Redirect to="/login" />
               )

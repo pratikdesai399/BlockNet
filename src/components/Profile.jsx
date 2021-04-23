@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Form, InputGroup, Button, Col } from 'react-bootstrap';
-
+import { useHistory } from 'react-router-dom';
 
 const Profile = ({ getUser, changeUserDetails }) => {
     const [userInfo, setUserInfo] = useState({
@@ -10,13 +10,32 @@ const Profile = ({ getUser, changeUserDetails }) => {
         posts: []
     })
     const [updatedInfo, setUpdatedInfo] = useState({
-        email: undefined,
-        password: undefined,
-        about: undefined
+        email: '',
+        password: '',
+        about: ''
     })
+
+    const history = useHistory();
 
     useEffect(() => {
         getUser().then(user => {
+            if(user) {
+                setUserInfo({
+                    userid: user.userid,
+                    username: user.username,
+                    email: user.email,
+                    password: user.password,
+                    about: user.about
+                });
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+    }, [])
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        changeUserDetails(updatedInfo).then(user => {
             setUserInfo({
                 userid: user.userid,
                 username: user.username,
@@ -24,15 +43,7 @@ const Profile = ({ getUser, changeUserDetails }) => {
                 password: user.password,
                 about: user.about
             });
-        }).catch(err => {
-            console.log(err);
-        });
-    })
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        changeUserDetails(updatedInfo).then(() => {
-            window.location.reload();
+            history.push("/dashboard");
         }).catch(err => {
             console.log(err);
         });
@@ -70,7 +81,9 @@ const Profile = ({ getUser, changeUserDetails }) => {
                             placeholder="Update Password (min. 8 characters)"
                             onChange={e => {
                                 setUpdatedInfo({
-                                    password: e.target.value
+                                    email: updatedInfo.email,
+                                    password: e.target.value,
+                                    about: updatedInfo.about
                                 })}
                             }   
                             minLength="8"
@@ -89,7 +102,9 @@ const Profile = ({ getUser, changeUserDetails }) => {
                             placeholder={userInfo.email}
                             onChange={e => {
                                 setUpdatedInfo({
-                                    email: e.target.value
+                                    email: e.target.value,
+                                    password: updatedInfo.password,
+                                    about: updatedInfo.about
                                 })}
                             }
                         />
@@ -99,7 +114,11 @@ const Profile = ({ getUser, changeUserDetails }) => {
                     <Form.Label>About</Form.Label>
                     <Form.Control 
                         onChange={e => {
-                            setUpdatedInfo({ about: e.target.value })
+                            setUpdatedInfo({ 
+                                email: updatedInfo.email,
+                                password: updatedInfo.password,
+                                about: e.target.value 
+                            })
                         }}
                         value={updatedInfo.about}
                         placeholder={userInfo.about}  

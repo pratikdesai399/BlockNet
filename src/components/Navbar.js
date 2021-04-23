@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import Identicon from 'identicon.js';
 import photo from '../photo.png'
 import { withRouter } from 'react-router-dom';
+import { Navbar as BNavbar, Nav, NavDropdown } from 'react-bootstrap';
 
 class Navbar extends Component {
 
 
   logout(e) {
     e.preventDefault();
+    localStorage.removeItem('user-auth');
     this.props.state(null)
     this.props.history.push("/login");
   }
@@ -43,43 +45,52 @@ class Navbar extends Component {
 
   render() {
     return (
-      <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-        <a
-          className="navbar-brand col-sm-3 col-md-2 mr-0"
-          href="/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+      <div>
+      <BNavbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <BNavbar.Brand href="/">
           <img src={photo} width="30" height="30" className="d-inline-block align-top" alt="" />
-         BlockNet
-        </a>
-        <ul className="navbar-nav px-3">
-          {
-            this.state.profileView && (
-            <li>
-              <a href="#" onClick={this.openDashboard}>Dashboard</a>
-            </li>
-            )
-          }
-          <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
+          BlockNet
+        </BNavbar.Brand>
+        <BNavbar.Toggle aria-controls="responsive-navbar-nav" />
+        <BNavbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="#features">Features</Nav.Link>
+            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
+              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+          <Nav>
+            {
+               this.state.profileView && (
+                <Nav.Link href="#" onClick={this.openDashboard}>Dashboard</Nav.Link>
+               )
+             }
+            <Nav.Link href="#" onClick={this.openProfile}>
             <small className="text-secondary">
-              <small id="account" onClick={this.openProfile}>{this.props.account}</small>
-            </small>
-            { this.props.account
-              ? <img
-                className='ml-2'
-                width='30'
-                height='30'
-                src={`data:image/png;base64,${new Identicon(this.props.account, 30).toString()}`}
-              />
-              : <span></span>
-            }
-          </li>
-          <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
-            <a href="#" onClick={this.logout}>Log Out</a>
-          </li>
-        </ul>
-      </nav>
+                 <small id="account">{this.props.account}</small>
+               </small>
+               { this.props.account
+                 ? <img
+                   className='ml-2'
+                   width='30'
+                   height='30'
+                   src={`data:image/png;base64,${new Identicon(this.props.account, 30).toString()}`}
+                 />
+                 : <span></span>
+               }
+            </Nav.Link>
+            <Nav.Link eventKey={2} href="#" onClick={this.logout}>
+              Log Out
+            </Nav.Link>
+          </Nav>
+        </BNavbar.Collapse>
+      </BNavbar>
+      </div>
     );
   }
 }
