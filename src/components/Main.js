@@ -5,6 +5,19 @@ import { Button,Container,Row,Col,ListGroup} from 'react-bootstrap';
 
 class Main extends Component {
 
+  async componentWillMount(){
+     var l = await this.props.list()
+     console.log(l)
+     this.setState({l})
+  }
+
+  constructor(props){
+    super(props);
+    this.state={
+      l : []
+    }
+  }
+
   render() {
     return (
       
@@ -13,22 +26,24 @@ class Main extends Component {
         <Row>
 
         <Col>
-        <div className="content mr-auto ml-auto position-fixed">
+        <div>
+        <div className="content mr-auto ml-auto ">
            
-            <br></br>
-            <Button size="lg" variant="outline-primary"><a href='/video'>GO TO REELS PAGE</a></Button>
-          </div><br /><br /><br />
+        <br></br><br></br>
+            <Button  size="lg" variant="outline-primary"><a href='/video'>GO TO REELS PAGE</a></Button>
+          </div><br />
+          
         
-                    <ListGroup variant="flush" className="position-fixed">
+                    <ListGroup variant="flush" >
                       <br></br>
-                      <ListGroup.Item as="li" active>User List</ListGroup.Item>
-                      <ListGroup.Item>Cras justo odio</ListGroup.Item>
-                      <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-                      <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-                      <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
-                      <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                      <ListGroup.Item as="li" active>USER LIST</ListGroup.Item>
+                      <ListGroup.Item>{this.state.l.map(item =>(
+                        <ListGroup.Item as="li">{item}</ListGroup.Item>
+                      ))}</ListGroup.Item>
+                      
                       
                     </ListGroup>
+                    </div>
                 
                   </Col>
             <Col xs={5}>
