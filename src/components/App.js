@@ -15,12 +15,13 @@ import Register from './Register'
 import Login from './Login'
 import Profile from './Profile'
 import Video from './Video'
+import { UserContext, UserProvider } from '../context/Context';
 const ipfsClient = require('ipfs-http-client')
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' })
 
 
 class App extends Component {
-
+  static contextType = UserContext;
   async componentWillMount(){
     try {
       window.ethereum.on('accountsChanged', acc => {
@@ -31,6 +32,7 @@ class App extends Component {
     }
     await this.loadWeb3()
     await this.loadBlockchainData()
+    await this.getContext();
   }
 
   // Load web3.js 
@@ -115,10 +117,7 @@ class App extends Component {
     } else {
       window.alert('Social Networks contract not deployed to detected network.')
     }
-    
-
   }
-
 
   captureFile = event => {
 
@@ -280,6 +279,13 @@ class App extends Component {
     })
   }
 
+  async getContext() {
+    const context = this.context;
+    this.setState({
+      user: context
+    })
+  }
+
   switchUser(newval) {
     this.setState({
       user: newval
@@ -331,7 +337,7 @@ class App extends Component {
       postCount: 0,
       posts: [],
       loading: true,
-      user: null,
+      user: {},
       userCount: 0,
       videos: [],
       buffer: null,
@@ -361,28 +367,29 @@ class App extends Component {
   render() {
     return (
       <Router>
+        <UserProvider>
         <div>
           <Switch>
             <Route exact path='/video'>
-            <Navbar 
-          account={this.state.account}
-        />
-        { this.state.loading
-          ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
-          : <Video
-              videos={this.state.videos}
-              uploadVideo={this.uploadVideo}
-              captureFile={this.captureFile}
-              changeVideo={this.changeVideo}
-              currentHash={this.state.currentHash}
-              currentTitle={this.state.currentTitle}
-            />
-        }
+              <Navbar 
+                account={this.state.account}
+              />
+              { this.state.loading
+                ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
+                : <Video
+                    videos={this.state.videos}
+                    uploadVideo={this.uploadVideo}
+                    captureFile={this.captureFile}
+                    changeVideo={this.changeVideo}
+                    currentHash={this.state.currentHash}
+                    currentTitle={this.state.currentTitle}
+                  />
+              }
             </Route>
             <Route path="/" exact render={() => {
               console.log(this.state.user);
               return(
-                localStorage.getItem("user-auth") ?
+                this.state.user.auth ?
                 <Redirect to="/dashboard" /> :
                 <Redirect to="/login" />
               )
@@ -390,7 +397,7 @@ class App extends Component {
             <Route exact path="/dashboard">
               <Navbar 
                   account={this.state.account}
-                  state = {this.switchUser}
+                  //state = {this.switchUser}
               />
               { this.state.loading
                 ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
@@ -414,7 +421,7 @@ class App extends Component {
               <Login
                     loginUser = {this.loginUser}
                     userCreds = {this.userCreds}
-                    state = {this.switchUser}
+                    //state = {this.switchUser}
               />
             </Route>
             <Route exact path="/register">
@@ -425,7 +432,7 @@ class App extends Component {
             <Route exact path="/profile">
               <Navbar 
                   account={this.state.account}
-                  state = {this.switchUser}
+                  //state = {this.switchUser}
               />
               <Profile 
                     getUser = {this.getUserDetails}
@@ -437,6 +444,7 @@ class App extends Component {
             </Route>
           </Switch>
         </div>
+        </UserProvider>
       </Router>
     );
   }

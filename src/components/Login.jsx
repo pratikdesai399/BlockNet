@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Form, InputGroup, Button, Alert } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom';
+import { UserContext } from '../context/Context'
 
 const Login = ({ loginUser, userCreds, state }) => {
     const [username, setUsername] = useState("");
@@ -10,6 +11,7 @@ const Login = ({ loginUser, userCreds, state }) => {
         type: 0
     });
     const history = useHistory();
+    const { login } = useContext(UserContext);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -33,8 +35,9 @@ const Login = ({ loginUser, userCreds, state }) => {
                         })
                     }
                     else {
-                        state(creds)
+                        //state(creds)
                         console.log(creds);
+                        login(user);
                         history.push("/dashboard");
                     }
                 })

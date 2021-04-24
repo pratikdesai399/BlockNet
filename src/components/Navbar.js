@@ -3,31 +3,41 @@ import Identicon from 'identicon.js';
 import photo from '../photo.png'
 import { withRouter } from 'react-router-dom';
 import { Navbar as BNavbar, Nav, NavDropdown } from 'react-bootstrap';
+import { UserContext } from '../context/Context';
 
 class navbar extends Component {
+  static contextType = UserContext;
 
+  componentDidUpdate(prevProps, prevState) {
+    if(this.state.profileView !== this.context.user.profile) {
+      this.state.profileView = this.context.user.profile;
+    }
+  }
 
   logout(e) {
     e.preventDefault();
+    this.context.logout();
     localStorage.removeItem('user-auth');
-    this.props.state(null)
+    // this.props.state(null)
     this.props.history.push("/login");
   }
 
-  openProfile(e) {
+  async openProfile(e) {
     e.preventDefault();
     if(this.state.profileView === false) {
+      await this.context.toggleProfile(true)
       this.setState({
-        profileView: true
+        profileView: this.context.user.profile
       })
       this.props.history.push("/profile");
     }
   }
 
-  openDashboard(e) {
+  async openDashboard(e) {
     e.preventDefault();
+    await this.context.toggleProfile(false)
     this.setState({
-      profileView: false
+      profileView: this.context.user.profile
     })
     this.props.history.push("/dashboard");
   }

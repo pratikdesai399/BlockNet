@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Form, InputGroup, Button, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
+import { UserContext } from '../context/Context';
 
 const Profile = ({ getUser, changeUserDetails }) => {
     const [userInfo, setUserInfo] = useState({
@@ -16,6 +17,7 @@ const Profile = ({ getUser, changeUserDetails }) => {
     })
 
     const history = useHistory();
+    const { user, toggleProfile } = useContext(UserContext);
 
     useEffect(() => {
         getUser().then(user => {
@@ -35,15 +37,18 @@ const Profile = ({ getUser, changeUserDetails }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        changeUserDetails(updatedInfo).then(user => {
+        changeUserDetails(updatedInfo).then(usr => {
             setUserInfo({
-                userid: user.userid,
-                username: user.username,
-                email: user.email,
-                password: user.password,
-                about: user.about
+                userid: usr.userid,
+                username: usr.username,
+                email: usr.email,
+                password: usr.password,
+                about: usr.about
             });
-            history.push("/dashboard");
+            toggleProfile(false).then(() => {
+                console.log(user.profile)
+                history.push("/dashboard");
+            })
         }).catch(err => {
             console.log(err);
         });
