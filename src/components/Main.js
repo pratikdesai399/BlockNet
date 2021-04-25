@@ -26,7 +26,8 @@ class Main extends Component {
         <Row>
 
         <Col>
-        <div>
+        
+        <div className="position-fixed col-md-3">
         <div className="content mr-auto ml-auto ">
            
         <br></br><br></br>
@@ -208,7 +209,7 @@ class Main extends Component {
             </div>
           </Col>
           <Col>
-          <div className="position-fixed">
+          <div className="position-fixed col-md-3">
           <div className="content mr-auto ml-auto ">
            
            <br></br>
