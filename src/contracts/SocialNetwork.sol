@@ -17,7 +17,7 @@ contract SocialNetwork {
 
   mapping(address => User) public users;
 
-  mapping(string => bool) public usernames;
+  mapping(string => address) public usernames;
   mapping(uint => Video) public videos;
 
   struct Video {
@@ -211,7 +211,7 @@ contract SocialNetwork {
 
     userCount++;
     users[msg.sender] = User(username, email, password_enc, about, msg.sender);
-    usernames[username] = true;
+    usernames[username] = msg.sender;
 
     emit UserCreated(username, email, password_enc, about, msg.sender);
   }
@@ -222,7 +222,10 @@ contract SocialNetwork {
   }
 
   function getUsername(string memory uname) public returns(bool) {
-    return usernames[uname];
+    if(usernames[uname] != address(0)) {
+      return true;
+    }
+    return false;
   }
 
   function getUserDetails(address id) public returns(
@@ -231,8 +234,17 @@ contract SocialNetwork {
     string memory password,
     string memory about
     ) {
-    User storage user = users[id];
+    User memory user = users[id];
     return (user.username, user.email, user.password, user.about);
+  }
+
+  function getUserProfile(string memory uname) public returns(
+    string memory email,
+    string memory about,
+    address uaddr
+  ) {
+    address addr = usernames[uname];
+    return(users[addr].email, users[addr].about, addr);
   }
 
   function setUserDetails(string memory email, string memory password, string memory about) public {

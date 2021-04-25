@@ -25,7 +25,7 @@ class App extends Component {
   async componentWillMount(){
     try {
       window.ethereum.on('accountsChanged', acc => {
-        this.loadWeb3()
+        window.location.reload();
       })
     } catch(err) {
       console.log(err);
@@ -89,13 +89,13 @@ class App extends Component {
 
       
       // Load images
-      for (var i = 1; i <= imagesCount; i++) {
+      for (i = 1; i <= imagesCount; i++) {
         const image = await socialnetwork.methods.images(i).call()
         this.setState({
           images: [...this.state.images, image]
         })
       }
-      for (var i = 1; i <= postCount; i++) {
+      for (i = 1; i <= postCount; i++) {
         const post = await socialnetwork.methods.posts(i).call()
         this.setState({
           posts: [...this.state.posts, post]
@@ -286,18 +286,6 @@ class App extends Component {
     })
   }
 
-  switchUser(newval) {
-    this.setState({
-      user: newval
-    });
-    if(!newval) {
-      localStorage.removeItem("user-auth");
-    }
-    else {
-      localStorage.setItem("user-auth", newval);
-    }
-  }
-
   async getUserDetails() {
     this.setState({loading: true});
     const { username, email, password, about } = await this.state.socialnetwork.methods.getUserDetails(this.state.account).call();
@@ -309,6 +297,21 @@ class App extends Component {
       password,
       about
     })
+  }
+
+  async getSearchProfile(username) {
+    const exists = await this.state.socialnetwork.methods.getUsername(username).call();
+    if(exists) {
+      const addr = await this.state.socialnetwork.methods.usernames(username).call();
+      const { uname, email, password, about } = await this.state.socialnetwork.methods.getUserDetails(addr).call()
+      return ({
+        username,
+        email,
+        about,
+        addr
+      })
+    }
+    return false;
   }
 
   async changeUserDetails(newUser) {
@@ -353,7 +356,7 @@ class App extends Component {
     this.createUser = this.createUser.bind(this)
     this.loginUser = this.loginUser.bind(this)
     this.userCreds = this.userCreds.bind(this);
-    this.switchUser = this.switchUser.bind(this);
+    this.getSearchProfile = this.getSearchProfile.bind(this);
     this.likeImage = this.likeImage.bind(this)
     this.disLikeImage = this.disLikeImage.bind(this)
     this.likePost = this.likePost.bind(this)
@@ -373,6 +376,7 @@ class App extends Component {
             <Route exact path='/video'>
               <Navbar 
                 account={this.state.account}
+                getProf={this.getSearchProfile}
               />
               { this.state.loading
                 ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
@@ -397,7 +401,7 @@ class App extends Component {
             <Route exact path="/dashboard">
               <Navbar 
                   account={this.state.account}
-                  //state = {this.switchUser}
+                  getProf={this.getSearchProfile}
               />
               { this.state.loading
                 ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
@@ -421,7 +425,6 @@ class App extends Component {
               <Login
                     loginUser = {this.loginUser}
                     userCreds = {this.userCreds}
-                    //state = {this.switchUser}
               />
             </Route>
             <Route exact path="/register">
@@ -432,7 +435,7 @@ class App extends Component {
             <Route exact path="/profile">
               <Navbar 
                   account={this.state.account}
-                  //state = {this.switchUser}
+                  getProf={this.getSearchProfile}
               />
               <Profile 
                     getUser = {this.getUserDetails}
