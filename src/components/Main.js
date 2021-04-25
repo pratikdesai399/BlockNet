@@ -32,7 +32,7 @@ class Main extends Component {
            
         <br></br><br></br>
             <Button  size="lg" variant="outline-primary"><a href='/video'>GO TO REELS PAGE</a></Button>
-          </div><br />
+          </div><br /><hr></hr>
           
         
                     <ListGroup variant="flush" >
@@ -214,7 +214,7 @@ class Main extends Component {
            
            <br></br>
            {/* <Button size="lg" variant="outline-primary">Upload Post</Button> */}
-           <h2>UPLOAD YOUR IMAGE HERE</h2>
+           <h4>UPLOAD IMAGE</h4>
              <form onSubmit={(event) => {
                event.preventDefault()
                const description = this.imageDescription.value
@@ -231,12 +231,13 @@ class Main extends Component {
                        placeholder="Image description..."
                        required />
                  </div>
-               <button type="submit" className="btn btn-success btn-block btn-lg">POST</button>
+               <button type="submit" className="btn btn-success btn-block ">POST</button>
              </form>
          </div>
+         <hr></hr>
 
          <div className='content mr-auto ml-auto'><br />
-         <h2>WRITE YOUR POST HERE</h2>
+         <h4>WRITE YOUR POST HERE</h4>
              <form onSubmit={(event) => {
    event.preventDefault()
    const content = this.postContent.value
@@ -251,7 +252,7 @@ class Main extends Component {
      placeholder="What's on your mind?"
      required />
  </div>
- <button type="submit" className="btn btn-primary btn-block">Share</button>
+ <button type="submit" className="btn btn-success btn-block">SHARE</button>
 </form>
 
          </div>
