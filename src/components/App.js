@@ -420,6 +420,7 @@ class App extends Component {
               <Navbar 
                 account={this.state.account}
                 getProf={this.getSearchProfile}
+                userCreds={this.userCreds}
               />
               { this.state.loading
                 ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
@@ -445,6 +446,7 @@ class App extends Component {
               <Navbar 
                   account={this.state.account}
                   getProf={this.getSearchProfile}
+                  userCreds={this.userCreds}
               />
               { this.state.loading
                 ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>

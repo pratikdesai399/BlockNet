@@ -46,7 +46,7 @@ class navbar extends Component {
 
   handleSearch(e) {
     e.preventDefault();
-    if(this.state.search && this.state !== this.state.username) {
+    if(this.state.search && this.state.search !== this.state.username) {
       this.props.getProf(this.state.search).then(user => {
         if(user) {
           this.setState({

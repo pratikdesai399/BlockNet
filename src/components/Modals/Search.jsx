@@ -46,9 +46,9 @@ export default class Search extends Component {
                     {/* {
                         this.props.res.following &&
                     } */}
-                        <Button variant="primary" onClick={this.handleClose}>
-                            Follow
-                        </Button>
+                    <Button variant="primary" onClick={this.handleClose}>
+                        Follow
+                    </Button>
                     </Modal.Footer>
                 </Modal>
             </div>
