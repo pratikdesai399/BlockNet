@@ -33,6 +33,7 @@ class App extends Component {
     await this.loadWeb3()
     await this.loadBlockchainData()
     await this.getContext();
+    // await this.listusers()
   }
 
   // Load web3.js 
@@ -118,6 +119,25 @@ class App extends Component {
       window.alert('Social Networks contract not deployed to detected network.')
     }
   }
+
+  async listusers(){
+    var l = [];
+    const arr = await this.state.socialnetwork.methods.getAllUsers().call();
+    const c = await this.state.socialnetwork.methods.userCount().call();
+
+    for(var i = 0; i <parseInt(c._hex); i++ ){
+      var name = await this.state.socialnetwork.methods.getCreds(arr[i]).call();
+      //console.log(name[0]);
+      l.push(name[0]);
+      // let {list} = this.state;
+      // list.push(name[0]);
+      
+      
+    }
+    return l;
+    
+  }
+
 
   captureFile = event => {
 
@@ -332,7 +352,9 @@ class App extends Component {
   }
 
   constructor(props) {
-    super(props)
+    super(props);
+    
+    
     this.state = {
       account: '',
       socialnetwork: null,
@@ -345,8 +367,12 @@ class App extends Component {
       videos: [],
       buffer: null,
       currentHash: null,
-      currentTitle: null
+      currentTitle: null,
+      list: []
+      
+      
     }
+    
 
     this.uploadImage = this.uploadImage.bind(this)
     this.tipImageOwner = this.tipImageOwner.bind(this)
@@ -365,6 +391,7 @@ class App extends Component {
     this.changeUserDetails = this.changeUserDetails.bind(this);
     this.uploadVideo = this.uploadVideo.bind(this)
     this.changeVideo = this.changeVideo.bind(this)
+    this.listusers = this.listusers.bind(this)
   }
 
   render() {
@@ -412,6 +439,7 @@ class App extends Component {
                       tipImageOwner={this.tipImageOwner}
                       likeImage={this.likeImage}
                       disLikeImage={this.disLikeImage}
+                      list={this.listusers}
 
                       posts={this.state.posts}
                       createPost={this.createPost}

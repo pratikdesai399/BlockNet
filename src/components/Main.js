@@ -5,6 +5,19 @@ import { Button,Container,Row,Col,ListGroup} from 'react-bootstrap';
 
 class Main extends Component {
 
+  async componentWillMount(){
+     var l = await this.props.list()
+     console.log(l)
+     this.setState({l})
+  }
+
+  constructor(props){
+    super(props);
+    this.state={
+      l : []
+    }
+  }
+
   render() {
     return (
       
@@ -13,22 +26,25 @@ class Main extends Component {
         <Row>
 
         <Col>
-        <div className="content mr-auto ml-auto position-fixed">
-           
-            <br></br>
-            <Button size="lg" variant="outline-primary"><a href='/video'>GO TO REELS PAGE</a></Button>
-          </div><br /><br /><br />
         
-                    <ListGroup variant="flush" className="position-fixed">
+        <div className="position-fixed col-md-3">
+        <div className="content mr-auto ml-auto ">
+           
+        <br></br><br></br>
+            <Button  size="lg" variant="outline-primary"><a href='/video'>GO TO REELS PAGE</a></Button>
+          </div><br /><hr></hr>
+          
+        
+                    <ListGroup variant="flush" >
                       <br></br>
-                      <ListGroup.Item as="li" active>User List</ListGroup.Item>
-                      <ListGroup.Item>Cras justo odio</ListGroup.Item>
-                      <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-                      <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-                      <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
-                      <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                      <ListGroup.Item as="li" active>USER LIST</ListGroup.Item>
+                      <ListGroup.Item>{this.state.l.map(item =>(
+                        <ListGroup.Item as="li">{item}</ListGroup.Item>
+                      ))}</ListGroup.Item>
+                      
                       
                     </ListGroup>
+                    </div>
                 
                   </Col>
             <Col xs={5}>
@@ -193,12 +209,12 @@ class Main extends Component {
             </div>
           </Col>
           <Col>
-          <div className="position-fixed">
+          <div className="position-fixed col-md-3">
           <div className="content mr-auto ml-auto ">
            
            <br></br>
            {/* <Button size="lg" variant="outline-primary">Upload Post</Button> */}
-           <h2>UPLOAD YOUR IMAGE HERE</h2>
+           <h4>UPLOAD IMAGE</h4>
              <form onSubmit={(event) => {
                event.preventDefault()
                const description = this.imageDescription.value
@@ -215,12 +231,13 @@ class Main extends Component {
                        placeholder="Image description..."
                        required />
                  </div>
-               <button type="submit" className="btn btn-success btn-block btn-lg">POST</button>
+               <button type="submit" className="btn btn-success btn-block ">POST</button>
              </form>
          </div>
+         <hr></hr>
 
          <div className='content mr-auto ml-auto'><br />
-         <h2>WRITE YOUR POST HERE</h2>
+         <h4>WRITE YOUR POST HERE</h4>
              <form onSubmit={(event) => {
    event.preventDefault()
    const content = this.postContent.value
@@ -235,7 +252,7 @@ class Main extends Component {
      placeholder="What's on your mind?"
      required />
  </div>
- <button type="submit" className="btn btn-primary btn-block">Share</button>
+ <button type="submit" className="btn btn-success btn-block">SHARE</button>
 </form>
 
          </div>

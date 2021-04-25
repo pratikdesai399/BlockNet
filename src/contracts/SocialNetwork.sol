@@ -16,6 +16,8 @@ contract SocialNetwork {
   mapping(uint => Post) public posts;
 
   mapping(address => User) public users;
+  address[] public userAddr;
+ 
 
   mapping(string => address) public usernames;
   mapping(uint => Video) public videos;
@@ -212,8 +214,13 @@ contract SocialNetwork {
     userCount++;
     users[msg.sender] = User(username, email, password_enc, about, msg.sender);
     usernames[username] = msg.sender;
+    userAddr.push(msg.sender);
 
     emit UserCreated(username, email, password_enc, about, msg.sender);
+  }
+
+  function getAllUsers() public returns (address[] memory){
+    return userAddr;
   }
 
   function getUser(address id) public returns(address) {
