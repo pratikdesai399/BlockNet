@@ -22,6 +22,9 @@ contract SocialNetwork {
   mapping(string => address) public usernames;
   mapping(uint => Video) public videos;
 
+  // mapping(address => address[]) followers;
+  // mapping(address => address[]) following;
+
   struct Video {
     uint id;
     string hash;
@@ -152,6 +155,11 @@ contract SocialNetwork {
     string about
   );
 
+  // event Follow(
+  //   address payable user,
+  //   address user_tbf
+  // );
+
   constructor() public {
   }
 
@@ -263,10 +271,56 @@ contract SocialNetwork {
     emit ProfileUpdated(msg.sender, email, password, about);
   }
 
-  function updateAbout(string memory about) public {
-    User storage user = users[msg.sender]; 
-    user.about = about;
-  }
+  // function follow(address user_tbf) public {
+  //   require(user_tbf != address(0), 'No account');
+  //   require(user_tbf != msg.sender, 'Cannot follow yourself');
+  //   followers[user_tbf].push(msg.sender);
+  //   following[msg.sender].push(user_tbf);
+
+  //   emit Follow(msg.sender, user_tbf);
+  // }
+
+  // function unFollow(address user_tbf) public {
+  //   require(user_tbf != address(0), 'No account');
+  //   uint len = followers[user_tbf].length;
+  //   for(uint i = 0; i < len; i++) {
+  //     if(followers[user_tbf][i] == msg.sender) {
+  //       followers[user_tbf][i] = followers[user_tbf][len - 1];
+  //       delete followers[user_tbf][len - 1];
+  //       followers[user_tbf].length--;
+  //     }
+  //   }
+  //   len = following[msg.sender].length; 
+  //   for(uint i = 0; i < len; i++) {
+  //     if(following[msg.sender][i] == user_tbf) {
+  //       followers[msg.sender][i] = followers[msg.sender][len - 1];
+  //       delete followers[msg.sender][len - 1];
+  //       followers[msg.sender].length--;
+  //     }
+  //   }
+  // }
+
+  // function getFollowers(address addr) public view returns(address[] memory) {
+  //   require(addr != address(0), 'No account');
+  //   return followers[addr];
+  // }
+
+  // function getFollowing(address addr) public view returns(address[] memory) {
+  //   require(addr != address(0), 'No account');
+  //   return following[addr];
+  // }
+
+  // function follows(address user2, address user1) public view returns(bool) {
+  //   require(user1 != address(0), 'No account');
+  //   require(user2 != address(0), 'No account');
+  //   uint len = followers[user1].length; // user2 follows user1
+  //   for(uint i = 0; i < len; i++) {
+  //     if(followers[user1][i] == user2) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   function tipImageOwner(uint _id) public payable {
     // Make sure the id is valid

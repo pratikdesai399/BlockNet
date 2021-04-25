@@ -126,7 +126,7 @@ class App extends Component {
     const c = await this.state.socialnetwork.methods.userCount().call();
 
     for(var i = 0; i <parseInt(c._hex); i++ ){
-      var name = await this.state.socialnetwork.methods.getCreds(arr[i]).call();
+      var name = await this.state.socialnetwork.methods.getUserDetails(arr[i]).call();
       //console.log(name[0]);
       l.push(name[0]);
       // let {list} = this.state;
@@ -309,13 +309,17 @@ class App extends Component {
   async getUserDetails() {
     this.setState({loading: true});
     const { username, email, password, about } = await this.state.socialnetwork.methods.getUserDetails(this.state.account).call();
+    // const following = await this.state.socialnetwork.methods.getFollowers(this.state.account);
+    // const followers = await this.state.socialnetwork.methods.getFollowing(this.state.account);
     this.setState({loading: false});
     return ({
       userid: this.state.account,
       username,
       email,
       password,
-      about
+      about,
+      // following,
+      // followers
     })
   }
 
@@ -323,12 +327,16 @@ class App extends Component {
     const exists = await this.state.socialnetwork.methods.getUsername(username).call();
     if(exists) {
       const addr = await this.state.socialnetwork.methods.usernames(username).call();
-      const { uname, email, password, about } = await this.state.socialnetwork.methods.getUserDetails(addr).call()
+      const { uname, email, password, about } = await this.state.socialnetwork.methods.getUserDetails(addr).call();
+      // const following = await this.state.socialnetwork.methods.follows(this.state.account, addr);
+      // const follows = await this.state.socialnetwork.methods.follows(addr, this.state.account);
       return ({
         username,
         email,
         about,
-        addr
+        addr,
+        // following,
+        // follows
       })
     }
     return false;
@@ -350,6 +358,14 @@ class App extends Component {
     this.setState({ loading: false });
     return (update);
   }
+
+  // async followUser() {
+
+  // }
+
+  // async unFollowUser() {
+
+  // }
 
   constructor(props) {
     super(props);
@@ -464,6 +480,7 @@ class App extends Component {
               <Navbar 
                   account={this.state.account}
                   getProf={this.getSearchProfile}
+                  userCreds={this.userCreds}
               />
               <Profile 
                     getUser = {this.getUserDetails}

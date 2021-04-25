@@ -27,7 +27,9 @@ const Profile = ({ getUser, changeUserDetails }) => {
                     username: user.username,
                     email: user.email,
                     password: user.password,
-                    about: user.about
+                    about: user.about,
+                    // followers: user.followers,
+                    // following: user.following
                 });
             }
         }).catch(err => {
@@ -133,6 +135,7 @@ const Profile = ({ getUser, changeUserDetails }) => {
                     Update User Info.
                 </Button>
             </Form>
+
         </div>
     )
 }

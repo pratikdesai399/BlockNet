@@ -12,6 +12,16 @@ import Search from './Modals/Search';
 class navbar extends Component {
   static contextType = UserContext;
 
+  componentDidMount() {
+    this.props.userCreds(this.props.account).then(user => {
+      this.setState({
+        username: user.username
+      })
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if(this.state.profileView !== this.context.user.profile) {
       this.state.profileView = this.context.user.profile;
@@ -36,7 +46,7 @@ class navbar extends Component {
 
   handleSearch(e) {
     e.preventDefault();
-    if(this.state.search) {
+    if(this.state.search && this.state !== this.state.username) {
       this.props.getProf(this.state.search).then(user => {
         if(user) {
           this.setState({
@@ -50,6 +60,11 @@ class navbar extends Component {
       });
       this.setState({
         search: ''
+      })
+    }
+    else {
+      this.setState({
+        result: {}
       })
     }
   }
@@ -77,6 +92,7 @@ class navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      username: '',
       profileView: false,
       search: '', 
       result: {}
@@ -139,7 +155,7 @@ class navbar extends Component {
             <NavDropdown title="Profile" id="collasible-nav-dropdown" className="mr-3" alignRight flip>
               <NavDropdown.Item href="#" onClick={this.openProfile}>
                 <small className="text-secondary">
-                  <small id="account">{this.props.account}</small>
+                  <small id="account">{this.state.username}</small>
                 </small>
                 { this.props.account
                   ? <img
@@ -151,8 +167,6 @@ class navbar extends Component {
                   : <span></span>
                 } 
               </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">Followers and Following</NavDropdown.Item>
             </NavDropdown>
             {/* <Nav.Link href="#" onClick={this.openProfile}>
             <small className="text-secondary">

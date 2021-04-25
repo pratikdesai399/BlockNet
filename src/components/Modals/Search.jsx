@@ -32,16 +32,23 @@ export default class Search extends Component {
                     </Modal.Header>
                     <Modal.Body>
                         User Address: {this.props.res.addr}
-                        Email: {this.props.res.email} 
+                        Email: {this.props.res.email}
+                        {/* {
+                            this.props.res.follows &&
+                            <p style={{color: blue}}>Follows you</p>
+                        }  */}
                         <small>About: {this.props.res.about}</small>
                     </Modal.Body>
                     <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={this.handleClose}>
-                        Follow
-                    </Button>
+                    {/* {
+                        this.props.res.following &&
+                    } */}
+                        <Button variant="primary" onClick={this.handleClose}>
+                            Follow
+                        </Button>
                     </Modal.Footer>
                 </Modal>
             </div>
