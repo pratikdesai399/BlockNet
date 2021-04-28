@@ -28,7 +28,7 @@ const Login = ({ loginUser, userCreds, state }) => {
                 console.log("User Exists");
                 userCreds(user).then(creds => {
                     if(username !== creds.username || password !== creds.password) {
-                        console.log(creds.username, creds.password == '')
+                        console.log(creds.username, creds.password === '')
                         setError({
                             err: true,
                             type: 2

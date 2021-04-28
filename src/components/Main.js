@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import Identicon from 'identicon.js';
 import { Button,Container,Row,Col,ListGroup} from 'react-bootstrap';
+import UserInfo from './Modals/UserInfo';
 // import SideNav, {MenuIcon} from 'react-simple-sidenav';
 
 class Main extends Component {
@@ -11,18 +12,29 @@ class Main extends Component {
      this.setState({l})
   }
 
+  onUserClicked(author) {
+    // console.log(author)
+    this.userinfo.current.handleShow(author);
+  }
+
   constructor(props){
     super(props);
     this.state={
       l : []
     }
+    this.userinfo = createRef();
+    this.onUserClicked = this.onUserClicked.bind(this)
   }
 
   render() {
     return (
-      
+  
       <Container fluid>
-        
+        <UserInfo 
+          ref={this.userinfo}
+          getProf={this.props.getProf}
+          unFollow={this.props.unFollow}
+        />
         <Row>
 
         <Col>
@@ -38,8 +50,8 @@ class Main extends Component {
                     <ListGroup variant="flush" >
                       <br></br>
                       <ListGroup.Item as="li" active>USER LIST</ListGroup.Item>
-                      <ListGroup.Item>{this.state.l.map(item =>(
-                        <ListGroup.Item as="li">{item}</ListGroup.Item>
+                      <ListGroup.Item>{this.state.l.map((item, key) =>(
+                        <ListGroup.Item as="li" key={key}>{item}</ListGroup.Item>
                       ))}</ListGroup.Item>
                       
                       
@@ -64,7 +76,10 @@ class Main extends Component {
               { this.props.images.map((image, key) => {
                 return(
                   <div className="card mb-4" key={key} >
-                    <div className="card-header">
+                    <div className="card-header" onClick={() => {
+                      this.onUserClicked(image.author)
+                      }
+                      } style={{cursor: 'pointer'}}>
                       <img
                         alt="img"
                         className='mr-2'
@@ -79,7 +94,7 @@ class Main extends Component {
                         <p className="text-center"><img alt="" src={`https://ipfs.infura.io/ipfs/${image.hash}`} style={{ maxWidth: '420px'}}/></p>
                         <p>{image.description}</p>
                       </li>
-                      <li key={key} className="list-group-item py-2">
+                      <li className="list-group-item py-2">
                         <small className="float-left mt-1 text-muted">
                           TIPS: {window.web3.utils.fromWei(image.tipAmount.toString(), 'Ether')} ETH
                         </small>
@@ -95,7 +110,7 @@ class Main extends Component {
                           TIP 0.1 ETH
                         </Button>
                       </li>
-                      <li key={key} className="list-group-item py-2">
+                      <li className="list-group-item py-2">
                         <small className="float-left mt-1 text-muted">
                           Likes: {window.web3.utils.fromWei(image.likes.toString(), 'Ether')}
                         </small>
@@ -110,7 +125,7 @@ class Main extends Component {
                         >
                           Like</Button>
                       </li>
-                      <li key={key} className="list-group-item py-2">
+                      <li className="list-group-item py-2">
                         <small className="float-left mt-1 text-muted">
                           Dislikes: {window.web3.utils.fromWei(image.dislikes.toString(), 'Ether')}
                         </small>
@@ -139,7 +154,10 @@ class Main extends Component {
 { this.props.posts.map((post, key) => {
                 return(
                   <div className="card mb-4" key={key} >
-                    <div className="card-header">
+                    <div className="card-header" onClick={() => {
+                      this.onUserClicked(post.author)
+                    }
+                      } style={{cursor: 'pointer'}}>
                       <img
                         alt=""
                         className='mr-2'
@@ -153,7 +171,7 @@ class Main extends Component {
                       <li className="list-group-item">
                         <p>{post.content}</p>
                       </li>
-                      <li key={key} className="list-group-item py-2">
+                      <li className="list-group-item py-2">
                         <small className="float-left mt-1 text-muted">
                           TIPS: {window.web3.utils.fromWei(post.tipAmount.toString(), 'Ether')} ETH
                         </small>
@@ -169,7 +187,7 @@ class Main extends Component {
                           TIP 0.1 ETH
                         </Button>
                       </li>
-                      <li key={key} className="list-group-item py-2">
+                      <li className="list-group-item py-2">
                         <small className="float-left mt-1 text-muted">
                           Likes: {window.web3.utils.fromWei(post.likes.toString(), 'Ether')}
                         </small>
@@ -185,7 +203,7 @@ class Main extends Component {
                           Like
                         </Button>
                       </li>
-                      <li key={key} className="list-group-item py-2">
+                      <li  className="list-group-item py-2">
                         <small className="float-left mt-1 text-muted">
                           Dislikes: {window.web3.utils.fromWei(post.dislikes.toString(), 'Ether')}
                         </small>

@@ -9,13 +9,14 @@ import {
 import { UserContext } from '../context/Context';
 import Search from './Modals/Search';
 
-class navbar extends Component {
+class Navbar extends Component {
   static contextType = UserContext;
 
   componentDidMount() {
     this.props.userCreds(this.props.account).then(user => {
       this.setState({
-        username: user.username
+        username: user.username,
+        profileView: this.context.user.profle
       })
     }).catch(err => {
       console.log(err)
@@ -24,7 +25,10 @@ class navbar extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if(this.state.profileView !== this.context.user.profile) {
-      this.state.profileView = this.context.user.profile;
+      
+      this.setState({
+        profileView: this.context.user.profile
+      })
     }
   }
 
@@ -93,14 +97,13 @@ class navbar extends Component {
     super(props);
     this.state = {
       username: '',
-      profileView: false,
+      profileView: window.location.pathname === '/profile' ? true : false,
       search: '', 
       result: {}
     }
     this.logout = this.logout.bind(this);
     this.openProfile = this.openProfile.bind(this);
     this.openDashboard = this.openDashboard.bind(this);
-    //this.searchModalref = this.searchModalref.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.showModal = this.showModal.bind(this);
   }
@@ -112,6 +115,8 @@ class navbar extends Component {
       <Search 
         res={this.state.result}
         ref="searchModal" 
+        follow={this.props.follow}
+        unFollow={this.props.unFollow}
       />
       <BNavbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <BNavbar.Brand href="/">
@@ -152,7 +157,7 @@ class navbar extends Component {
                 <Nav.Link href="#" onClick={this.openDashboard}>Dashboard</Nav.Link>
                )
              }
-            <NavDropdown title="Profile" id="collasible-nav-dropdown" className="mr-3" alignRight flip>
+            <NavDropdown title="Profile" id="collasible-nav-dropdown" className="mr-3" alignRight flip="true">
               <NavDropdown.Item href="#" onClick={this.openProfile}>
                 <small className="text-secondary">
                   <small id="account">{this.state.username}</small>
@@ -168,20 +173,6 @@ class navbar extends Component {
                 } 
               </NavDropdown.Item>
             </NavDropdown>
-            {/* <Nav.Link href="#" onClick={this.openProfile}>
-            <small className="text-secondary">
-                 <small id="account">{this.props.account}</small>
-               </small>
-               { this.props.account
-                 ? <img
-                   className='ml-2'
-                   width='30'
-                   height='30'
-                   src={`data:image/png;base64,${new Identicon(this.props.account, 30).toString()}`}
-                 />
-                 : <span></span>
-               }
-            </Nav.Link> */}
             <Nav.Link eventKey={2} href="#" onClick={this.logout}>
               Log Out
             </Nav.Link>
@@ -193,4 +184,4 @@ class navbar extends Component {
   }
 }
 
-export default withRouter(navbar);
+export default withRouter(Navbar);

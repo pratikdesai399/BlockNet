@@ -1,14 +1,18 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { Form, InputGroup, Button, Col } from 'react-bootstrap';
+import React, { useEffect, useState, useContext, useRef } from 'react'
+import { Form, InputGroup, Button, Col, Badge } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { UserContext } from '../context/Context';
+import FollowDetails from './Modals/FollowDetails'
 
 const Profile = ({ getUser, changeUserDetails }) => {
     const [userInfo, setUserInfo] = useState({
         userid: '',
         username: '',
+        email: '',
+        password: '',
         about: '',
-        posts: []
+        following: [],
+        followers: []
     })
     const [updatedInfo, setUpdatedInfo] = useState({
         email: '',
@@ -18,6 +22,7 @@ const Profile = ({ getUser, changeUserDetails }) => {
 
     const history = useHistory();
     const { user, toggleProfile } = useContext(UserContext);
+    const followDetailsRef = useRef();
 
     useEffect(() => {
         getUser().then(user => {
@@ -28,14 +33,24 @@ const Profile = ({ getUser, changeUserDetails }) => {
                     email: user.email,
                     password: user.password,
                     about: user.about,
-                    // followers: user.followers,
-                    // following: user.following
+                    followers: user.followers,
+                    following: user.following
                 });
             }
         }).catch(err => {
             console.log(err);
         });
     }, [])
+
+    const openFollowers = (e) => {
+        e.preventDefault();
+        followDetailsRef.current.handleShow(userInfo.followers, true);
+    }
+    const openFollowing = (e) => {
+        e.preventDefault();
+        followDetailsRef.current.handleShow(userInfo.following, false);
+    }
+    
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -45,7 +60,9 @@ const Profile = ({ getUser, changeUserDetails }) => {
                 username: usr.username,
                 email: usr.email,
                 password: usr.password,
-                about: usr.about
+                about: usr.about,
+                followers: usr.followers,
+                following: usr.following
             });
             toggleProfile(false).then(() => {
                 console.log(user.profile)
@@ -58,6 +75,9 @@ const Profile = ({ getUser, changeUserDetails }) => {
 
     return (
         <div className="profileForm mt-5 container-fluid">
+            <FollowDetails 
+                ref={followDetailsRef}
+            />
             <div>
                 <h3>User Id</h3>
                 <h4>{userInfo.userid}</h4>
@@ -136,6 +156,16 @@ const Profile = ({ getUser, changeUserDetails }) => {
                 </Button>
             </Form>
 
+            <div className="followMenu">
+                <Button variant="info" style={{display: 'inline-block'}} onClick={openFollowers}>
+                    Followers <Badge variant="light">{userInfo.followers.length}</Badge>
+                    <span className="sr-only">unread messages</span>
+                </Button>
+                <Button variant="info" style={{display: 'inline-block'}} onClick={openFollowing}>
+                    Following <Badge variant="light">{userInfo.following.length}</Badge>
+                    <span className="sr-only">unread messages</span>
+                </Button>
+            </div>
         </div>
     )
 }
