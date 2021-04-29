@@ -1,3 +1,1 @@
-TO RUN THE PROJECT
-
-Run npm run start
+PROJECT DEMO LINK : https://youtu.be/UVuagfNkafU
